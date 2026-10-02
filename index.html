@@ -1,187 +1,263 @@
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>NFL Board</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"><style>
-:root{--bg:#0f1521;--panel:#161d2b;--panel2:#1b2434;--line:#252f42;--ink:#e6eaf2;--mute:#8b96ab;--accent:#e4513f;--green:#2f9e6b;
-      --good:#4cc38a;--bad:#f0655a;--warn:#e3b341;--field:#153b2d}
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1f5f3a"><title>NFL Board</title>
+<style>
+:root{
+  color-scheme: light;
+  --page:#f4f4f1; --surface:#fcfcfb; --surface-2:#f0efec; --ink:#0b0b0b; --ink-2:#52514e; --muted:#898781;
+  --grid:#e1e0d9; --base:#c3c2b7; --ring:rgba(11,11,11,.10);
+  --blue:#2a78d6; --blue-wash:rgba(42,120,214,.10); --red:#e34948; --good:#0ca30c; --good-text:#006300; --warn:#b37400;
+  --turf:#1f5f3a; --turf-2:#2c7a4b; --on-turf:#f3f7f2; --chip:#e8efe9; --chip-ink:#1f5f3a;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  color-scheme: dark;
+  --page:#0d0d0d; --surface:#1a1a19; --surface-2:#232321; --ink:#ffffff; --ink-2:#c3c2b7; --muted:#898781;
+  --grid:#2c2c2a; --base:#383835; --ring:rgba(255,255,255,.10);
+  --blue:#3987e5; --blue-wash:rgba(57,135,229,.14); --red:#e66767; --good:#0ca30c; --good-text:#0ca30c; --warn:#fab219;
+  --turf:#15402a; --turf-2:#1d5536; --on-turf:#e7f1ea; --chip:#1f2b23; --chip-ink:#8fd1a6;
+}}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --page:#0d0d0d; --surface:#1a1a19; --surface-2:#232321; --ink:#ffffff; --ink-2:#c3c2b7; --muted:#898781;
+  --grid:#2c2c2a; --base:#383835; --ring:rgba(255,255,255,.10);
+  --blue:#3987e5; --blue-wash:rgba(57,135,229,.14); --red:#e66767; --good:#0ca30c; --good-text:#0ca30c; --warn:#fab219;
+  --turf:#15402a; --turf-2:#1d5536; --on-turf:#e7f1ea; --chip:#1f2b23; --chip-ink:#8fd1a6;
+}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.55 Inter,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
-.hero{background:linear-gradient(90deg,var(--field),#0f1521 70%);border-bottom:1px solid var(--line);padding:26px 0 22px}
-.hero .in{display:flex;align-items:center;gap:16px}
-.ball{width:44px;height:28px;flex:none;opacity:.9}
-h1{font-size:22px;font-weight:600;letter-spacing:-.01em;margin:0}
-.hero .sub{color:var(--mute);margin-top:2px;font-size:13px}
-.in{max-width:1180px;margin:0 auto;padding:0 24px}
-main{padding:24px 0 72px}
-h2{font-size:15px;font-weight:600;margin:40px 0 12px;color:var(--ink);display:flex;align-items:center;gap:10px}
-h2 .wk{background:var(--panel2);border:1px solid var(--line);color:var(--mute);padding:2px 8px;border-radius:999px;font-size:12px;font-weight:500}
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:14px 0 4px}
-.kpi{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
-.kpi .k{font-size:11px;color:var(--mute);letter-spacing:.02em}
-.kpi .v{font-size:20px;font-weight:600;margin-top:4px;letter-spacing:-.01em}
-.picks{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px;margin-top:12px}
-.pick{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px 16px;position:relative}
-.pick .badge{display:inline-block;background:var(--accent);color:#fff;font-size:11px;font-weight:600;letter-spacing:.04em;padding:3px 9px;border-radius:999px}
-.pick .game{color:var(--mute);font-size:13px;margin-top:12px}
-.pick .bet{font-size:26px;font-weight:600;letter-spacing:-.02em;margin:2px 0 2px}
-.pick .at{font-size:14px;color:var(--mute)}
-.pick .price{font-weight:600;color:var(--ink)}
-.pick .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px;border-top:1px solid var(--line);padding-top:12px}
-.pick .stats .k{font-size:11px;color:var(--mute)}
-.pick .stats .v{font-size:16px;font-weight:600;margin-top:2px}
-.gate-ok{color:var(--good)}.gate-no{color:var(--warn)}
-.pos{color:var(--good);font-weight:500}.neg{color:var(--bad)}.dim{color:var(--mute)}
-.bench{margin-top:12px;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
-.bench .row{display:grid;grid-template-columns:36px 1.1fr 1.4fr .8fr .7fr .7fr .7fr 1.6fr;gap:8px;padding:10px 16px;border-bottom:1px solid var(--line);align-items:center}
-.bench .row:last-child{border-bottom:0}.bench .hdr{font-size:11px;color:var(--mute);background:var(--panel2)}
-.bench .rk{color:var(--mute)}.bench .b{font-weight:500}
-.why{margin-top:14px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
-.why h3{font-size:14px;font-weight:600;margin:0 0 6px}
-.why p{margin:8px 0;color:#c9d1de;line-height:1.6}.why .lead{color:var(--ink)}
-.wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
-table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;font-size:13px}
-th,td{padding:9px 12px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
-th{font-size:11px;font-weight:500;color:var(--mute);background:var(--panel2);position:sticky;top:0}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--page);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:1040px;margin:0 auto;padding:0 16px}
+header{background:linear-gradient(180deg,var(--turf),var(--turf-2));color:var(--on-turf)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:14px;padding-bottom:14px}
+header .brand{display:flex;align-items:center;gap:10px;font-weight:650;font-size:17px;letter-spacing:-.01em}
+header .brand svg{width:26px;height:16px;flex:none}
+header .meta{font-size:12.5px;opacity:.85;text-align:right;line-height:1.35}
+.yardline{height:6px;background:repeating-linear-gradient(90deg,var(--turf-2) 0 38px,rgba(255,255,255,.35) 38px 40px)}
+main{padding:18px 0 56px}
+section{margin-top:28px}
+h2{font-size:13px;font-weight:650;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);margin:0 0 10px;text-wrap:balance}
+.card{background:var(--surface);border:1px solid var(--ring);border-radius:14px}
+/* scoreboard */
+.score{padding:18px 18px 16px}
+.score .label{font-size:13px;color:var(--ink-2)}
+.hero{font-size:52px;font-weight:650;letter-spacing:-.03em;line-height:1.05;margin:2px 0 4px}
+.hero small{font-size:18px;font-weight:550;color:var(--ink-2);letter-spacing:0;margin-left:6px}
+.verdict{display:flex;gap:10px;align-items:flex-start;margin-top:10px;padding:10px 12px;border-radius:10px;background:var(--surface-2);font-size:14px;color:var(--ink)}
+.verdict .ic{flex:none;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700;color:#fff;margin-top:1px}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--ring);border-top:1px solid var(--ring);border-radius:0 0 14px 14px;overflow:hidden}
+.tile{background:var(--surface);padding:12px 14px}
+.tile .k{font-size:12px;color:var(--ink-2)}
+.tile .v{font-size:20px;font-weight:650;margin-top:2px;letter-spacing:-.01em}
+.tile .s{font-size:11.5px;color:var(--muted)}
+/* picks */
+.picks{display:grid;gap:12px}
+.pick{padding:16px 16px 14px;position:relative}
+.pick .top{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--chip);color:var(--chip-ink)}
+.chip.rank{background:var(--blue);color:#fff}
+.chip.ok{background:transparent;border:1px solid var(--ring);color:var(--good-text)}
+.chip.no{background:transparent;border:1px solid var(--ring);color:var(--ink-2)}
+.pick .game{margin-top:12px;font-size:13px;color:var(--ink-2)}
+.pick .bet{font-size:30px;font-weight:700;letter-spacing:-.02em;line-height:1.1;margin-top:2px}
+.pick .price{font-size:15px;color:var(--ink-2);margin-top:4px}
+.pick .price b{color:var(--ink);font-weight:650}
+.meter{margin-top:14px}
+.meter .row{display:flex;justify-content:space-between;font-size:12.5px;color:var(--ink-2);margin-bottom:6px}
+.meter .row b{color:var(--ink)}
+.bar{position:relative;height:8px;border-radius:999px;background:var(--surface-2)}
+.bar i{position:absolute;left:0;top:0;bottom:0;border-radius:999px;background:var(--blue)}
+.bar u{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink-2);border-radius:1px}
+.bar-legend{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:5px}
+.why{margin-top:12px;font-size:13.5px;color:var(--ink-2);line-height:1.55;border-top:1px solid var(--ring);padding-top:10px}
+.bench{overflow:hidden}
+.brow{display:grid;grid-template-columns:28px 1fr auto;gap:10px;align-items:center;padding:11px 14px;border-top:1px solid var(--ring)}
+.brow:first-child{border-top:0}
+.brow .n{font-size:13px;color:var(--muted);font-weight:600}
+.brow .b{font-weight:600}
+.brow .g{font-size:12.5px;color:var(--ink-2)}
+.brow .r{text-align:right;font-size:13px;color:var(--ink-2)}
+.brow .r b{display:block;color:var(--ink);font-size:14px}
+.note{font-size:13px;color:var(--ink-2);margin:10px 2px 0;line-height:1.55}
+/* charts */
+.charts{display:grid;gap:12px}
+.chart{padding:14px 14px 10px}
+.chart h3{font-size:15px;font-weight:650;margin:0}
+.chart .sub{font-size:12.5px;color:var(--ink-2);margin:2px 0 8px}
+.plot{position:relative;width:100%}
+.plot svg{display:block;width:100%;overflow:visible}
+.plot text{font-size:11px;fill:var(--muted);font-family:inherit}
+.plot text.v{fill:var(--ink);font-weight:600}
+.plot text.l{fill:var(--ink-2)}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--surface);font-size:12px;line-height:1.4;padding:7px 9px;border-radius:8px;max-width:220px;opacity:0;transition:opacity .12s;z-index:5}
+.tip b{font-weight:650}
+details.data{margin-top:6px}
+details.data summary{font-size:12px;color:var(--muted);cursor:pointer;list-style:none;padding:4px 0}
+details.data summary::-webkit-details-marker{display:none}
+details.data summary:before{content:"▸ ";} details.data[open] summary:before{content:"▾ ";}
+/* fold-away sections */
+details.more{background:var(--surface);border:1px solid var(--ring);border-radius:12px;margin-top:8px}
+details.more>summary{padding:13px 14px;font-weight:600;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center}
+details.more>summary::-webkit-details-marker{display:none}
+details.more>summary:after{content:"+";color:var(--muted);font-weight:400;font-size:18px}
+details.more[open]>summary:after{content:"–"}
+details.more>summary span{font-weight:400;font-size:12.5px;color:var(--muted);margin-left:8px}
+details.more .inner{padding:0 14px 14px}
+.tbl{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}
+th,td{padding:8px 10px;border-bottom:1px solid var(--grid);text-align:right;white-space:nowrap}
+th{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+td:first-child,th:first-child,.l{text-align:left}
 tr:last-child td{border-bottom:0}
-td:first-child,th:first-child,td.l,th.l{text-align:left}
-.tag{display:inline-block;padding:1px 7px;border-radius:999px;font-size:11px;font-weight:600;background:var(--accent);color:#fff;margin-left:6px}
-.note{color:var(--mute);font-size:13px;margin:10px 2px 0;line-height:1.55}
-.foot{color:var(--mute);margin-top:44px;font-size:12px}
-code{background:var(--panel2);padding:1px 5px;border-radius:4px;font-size:12px}
+.pos{color:var(--good-text);font-weight:600}.neg{color:var(--red)}.dim{color:var(--muted)}
+footer{font-size:12px;color:var(--muted);margin-top:34px;line-height:1.6}
+a{color:var(--blue)}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:4px}
+@media (min-width:760px){
+  .picks{grid-template-columns:1fr 1fr}
+  .charts{grid-template-columns:1fr 1fr}
+  .charts .wide{grid-column:1 / -1}
+  .hero{font-size:60px}
+}
+@media (max-width:420px){ .tile .v{font-size:18px} .pick .bet{font-size:27px} .tiles{grid-template-columns:1fr 1fr 1fr} }
+@media (prefers-reduced-motion:reduce){ .tip{transition:none} }
 </style>
-<div class='hero'><div class='in'><svg class='ball' viewBox='0 0 74 46' aria-hidden='true'><ellipse cx='37' cy='23' rx='35' ry='21' fill='#7a3b12' stroke='#f5c542' stroke-width='2'/>
-<path d='M6 23 Q37 -4 68 23 Q37 50 6 23' fill='none' stroke='#3d1c07' stroke-width='1.5'/><path d='M24 23 H50' stroke='#fff' stroke-width='2.5' stroke-linecap='round'/>
-<path d='M29 18 V28 M36 18 V28 M43 18 V28' stroke='#fff' stroke-width='2.5' stroke-linecap='round'/><path d='M14 23 q0 -8 5 -14 M60 23 q0 -8 -5 -14' fill='none' stroke='#fff' stroke-width='2'/></svg><div><h1>NFL Board</h1><div class='sub'>2026 season · Novig, DraftKings, FanDuel · paper mode</div></div></div></div>
-<main><div class='in'>
-<div class='kpis'><div class='kpi'><div class='k'>week</div><div class='v'>4</div></div><div class='kpi'><div class='k'>record, current rules</div><div class='v'>8-0-0</div></div><div class='kpi'><div class='k'>P&L (u), current rules</div><div class='v'>+8.03</div></div><div class='kpi'><div class='k'>mean CLV, current rules</div><div class='v'>+1.31%</div></div><div class='kpi'><div class='k'>record as recorded</div><div class='v'>14-4-0</div></div><div class='kpi'><div class='k'>P&L (u) as recorded</div><div class='v'>+17.78</div></div><div class='kpi'><div class='k'>candidates logged</div><div class='v'>88</div></div><div class='kpi'><div class='k'>snapshot (UTC)</div><div class='v'>2026-10-02 13:32</div></div></div>
-<div class='note'>"Current rules" re-scores every official pick under the rules adopted Oct 2: positive expected value, priced between -250 and +250, and one pick per game per week. Weeks 1-3 included repeat picks of the same game and five longshot alternate lines, which the new rules exclude. 10 of 20 recorded picks drop out. Snapshot 2026-10-02 13:32 UTC.</div>
-<h2>This week's card <span class='wk'>Week 4</span></h2><div class='picks'>
-<div class='pick'><div class='badge'>Pick 1 · lag</div><div class='game'>Jets @ Bears</div><div class='bet'>Bears -3.5</div><div class='at'>at <span class='price'>+106</span> on Novig</div><div class='stats'><div><div class='k'>fair win</div><div class='v'>50.6%</div></div><div><div class='k'>edge</div><div class='v pos'>+2.1%</div></div><div><div class='k'>EV / unit</div><div class='v pos'>+4.3%</div></div><div><div class='k'>gate</div><div class='v'><span class='gate-no'>below gate</span></div></div></div></div>
-<div class='pick'><div class='badge'>Pick 2 · execution</div><div class='game'>Cardinals @ Giants</div><div class='bet'>Cardinals -3.5</div><div class='at'>at <span class='price'>+135</span> on Novig</div><div class='stats'><div><div class='k'>fair win</div><div class='v'>44.4%</div></div><div><div class='k'>edge</div><div class='v pos'>+1.8%</div></div><div><div class='k'>EV / unit</div><div class='v pos'>+4.2%</div></div><div><div class='k'>gate</div><div class='v'><span class='gate-no'>below gate</span></div></div></div></div>
+<header><div class='wrap'><div class='brand'><svg viewBox='0 0 52 32' aria-hidden='true'><ellipse cx='26' cy='16' rx='24' ry='14' fill='#8a4a1c'/><path d='M17 16h18M21 12.5v7M26 12.5v7M31 12.5v7' stroke='#fff' stroke-width='2' stroke-linecap='round'/></svg>NFL Board</div><div class='meta'>Week 4 · 2026<br>Updated Fri Oct 2, 9:32 AM ET</div></div></header><div class='yardline'></div>
+<main><div class='wrap'>
+<section style='margin-top:0'><h2>How we're doing</h2><div class='card'><div class='score'><div class='label'>Units won by our picks this season</div><div class='hero'>+8.03<small>units</small></div><div class='verdict'><span class='ic' style='background:var(--good)'>✓</span><div><b>We're beating the closing line</b> by 1.1% across 71 logged bets, and the 95% range stays above zero. That's the clearest sign of a real edge. The 8&#8209;0 record is mostly luck at this sample size.</div></div></div><div class='tiles'><div class='tile'><div class='k'>Record</div><div class='v'>8-0</div><div class='s'>picks graded</div></div><div class='tile'><div class='k'>Beat the close</div><div class='v'>+1.3%</div><div class='s'>our picks, avg</div></div><div class='tile'><div class='k'>Bets tracked</div><div class='v'>88</div><div class='s'>all candidates</div></div></div></div></section>
+<section><h2>This week's picks</h2><div class='picks'>
+<article class='card pick'><div class='top'><span class='chip rank'>Pick 1</span><span class='chip'>Line-move lag</span><span class='chip no'>Small edge · minimum stake</span></div><div class='game'>Jets @ Bears · Sun 1:00 PM ET</div><div class='bet'>Bears -3.5</div><div class='price'><b>+106</b> on Novig</div><div class='meter'><div class='row'><span>Edge <b>+2.1%</b></span><span>We estimate <b>51%</b> · needs 49%</span></div><div class='bar' role='img' aria-label='Edge 2.1 percent against a 2.5 percent bar'><i style='width:41%'></i><u style='left:50%'></u></div><div class='bar-legend'><span>0%</span><span>2.5% bar</span><span>5%+</span></div></div><div class='why'>The sharp books moved this spread from -3.5 to -4.0 since 10-01 21:30 UTC, and Novig has not followed: it still shows Bears -3.5 at +106. Historically the side the market moves toward covers 55-58% when you can still get the old number, which is why this outranks a plain price gap. At that line the fair win rate is 51% against a 49% break-even. That is a +2.1% edge and +4.3% expected return per unit, below the 2.5% gate; it is ranked here because nothing else on the board beats it, so keep it small.</div></article>
+<article class='card pick'><div class='top'><span class='chip rank'>Pick 2</span><span class='chip'>Price edge</span><span class='chip no'>Small edge · minimum stake</span></div><div class='game'>Cardinals @ Giants · Sun 1:00 PM ET</div><div class='bet'>Cardinals -3.5</div><div class='price'><b>+135</b> on Novig</div><div class='meter'><div class='row'><span>Edge <b>+1.8%</b></span><span>We estimate <b>44%</b> · needs 43%</span></div><div class='bar' role='img' aria-label='Edge 1.8 percent against a 2.5 percent bar'><i style='width:36%'></i><u style='left:50%'></u></div><div class='bar-legend'><span>0%</span><span>2.5% bar</span><span>5%+</span></div></div><div class='why'>The sharp books (Pinnacle, Novig, Kalshi) make Cardinals a 2.50-point favorite. At Cardinals -3.5 that side wins about 44% of the time, and +135 only needs 43% to break even. Same bet elsewhere: FanDuel +128, DraftKings +113. The line sits across a key number, which is where a half point is worth the most. That is a +1.8% edge and +4.2% expected return per unit, below the 2.5% gate; it is ranked here because nothing else on the board beats it, so keep it small.</div></article>
 </div>
-<div class='bench'><div class='row hdr'><div>#</div><div>Game</div><div>Bet</div><div>Book</div><div>Price</div><div>Edge</div><div>EV</div><div>Notes</div></div>
-<div class='row'><div class='rk'>3</div><div>Titans @ Ravens</div><div class='b'>Titans +10.5</div><div>novig</div><div>+111</div><div class='pos'>+1.9%</div><div class='pos'>+4.1%</div><div class='dim'>game already picked this week; off main line</div></div>
-<div class='row'><div class='rk'>4</div><div>Dolphins @ Vikings</div><div class='b'>Vikings -11.5</div><div>novig</div><div>+115</div><div class='pos'>+1.6%</div><div class='pos'>+3.4%</div><div class='dim'>off main line</div></div>
-<div class='row'><div class='rk'>5</div><div>Rams @ Eagles</div><div class='b'>Over 43.5</div><div>novig</div><div>+113</div><div class='pos'>+1.2%</div><div class='pos'>+2.6%</div><div class='dim'>game already picked this week; off main line</div></div>
+<h2 style='margin-top:20px'>Also on the board</h2><div class='card bench'>
+<div class='brow'><div class='n'>3</div><div><div class='b'>Titans +10.5</div><div class='g'>Titans @ Ravens · Price edge · game already picked</div></div><div class='r'><b>+111</b>Novig · EV +4.1%</div></div>
+<div class='brow'><div class='n'>4</div><div><div class='b'>Vikings -11.5</div><div class='g'>Dolphins @ Vikings · Price edge</div></div><div class='r'><b>+115</b>Novig · EV +3.4%</div></div>
+<div class='brow'><div class='n'>5</div><div><div class='b'>Over 43.5</div><div class='g'>Rams @ Eagles · Price edge · game already picked</div></div><div class='r'><b>+113</b>Novig · EV +2.6%</div></div>
 </div>
-<div class='why'><h3>Why these picks</h3>
-<p class='lead'>Every candidate from every strategy is ranked by expected return per unit. The picks are the best two with positive EV, one per game, skipping games already picked earlier this week. #1 is Bears -3.5 at +106 on Novig (a stale line after a sharp move, EV +4.3%); #2 is Cardinals -3.5 at +135 on Novig (a price edge, EV +4.2%). Also on the card: Titans +10.5 +4.1% (game already picked); Vikings -11.5 +3.4%; Over 43.5 +2.6% (game already picked). Nothing this week clears the betting gate, so treat both picks as minimum-size.</p>
-<p><b>#1 Bears -3.5.</b> The sharp books moved this spread from -3.5 to -4.0 since 10-01 21:30 UTC, and Novig has not followed: it still shows Bears -3.5 at +106. Historically the side the market moves toward covers 55-58% when you can still get the old number, which is why this outranks a plain price gap. At that line the fair win rate is 51% against a 49% break-even. That is a +2.1% edge and +4.3% expected return per unit, below the 2.5% gate; it is ranked here because nothing else on the board beats it, so keep it small.</p>
-<p><b>#2 Cardinals -3.5.</b> The sharp books (Pinnacle, Novig, Kalshi) make Cardinals a 2.50-point favorite. At Cardinals -3.5 that side wins about 44% of the time, and +135 only needs 43% to break even. Same bet elsewhere: FanDuel +128, DraftKings +113. The line sits across a key number, which is where a half point is worth the most. That is a +1.8% edge and +4.2% expected return per unit, below the 2.5% gate; it is ranked here because nothing else on the board beats it, so keep it small.</p>
-</div>
-<div class='note'>Picks are ranked by expected value per unit across every strategy. Plus 2 more candidates ranked and logged in the background. Below-gate picks are still logged so the record shows whether the gate is set right. Cards lock Wed 6pm, Thu 6pm and Sat 10am ET.</div>
-<h2>Kickoff wind (outdoor games)</h2><div class='wrap'><table><tr><th class='l'>Game</th><th class='l'>Stadium</th><th>Wind mph</th><th>Gust</th><th>Temp F</th><th>Precip %</th><th>Fair total</th><th>Wind adj</th><th>Adj total</th><th class='l'>Best under</th><th>Edge</th></tr>
-<tr><td class='l'>Cardinals @ Giants</td><td class='l'>MetLife Stadium</td><td class=''>11</td><td>14</td><td>68</td><td>13</td><td>44.1</td><td>+0.0</td><td>44.1</td><td class='l'>Under 43.5 +111 @ novig</td><td class='pos'>+0.7%</td></tr>
-<tr><td class='l'>Packers @ Buccaneers</td><td class='l'>Raymond James Stadium</td><td class=''>10</td><td>12</td><td>91</td><td>20</td><td>38.8</td><td>+0.0</td><td>38.8</td><td class='l'>Under 38.5 +100 @ novig</td><td class='neg'>-0.9%</td></tr>
-<tr><td class='l'>Patriots @ Bills</td><td class='l'>Highmark Stadium</td><td class=''>9</td><td>14</td><td>67</td><td>1</td><td>48.9</td><td>+0.0</td><td>48.9</td><td class='l'>Under 48.5 +104 @ novig</td><td class='neg'>-0.1%</td></tr>
-<tr><td class='l'>Rams @ Eagles</td><td class='l'>Lincoln Financial Field</td><td class=''>8</td><td>21</td><td>62</td><td>37</td><td>42.9</td><td>+0.0</td><td>42.9</td><td class='l'>Under 42.5 +108 @ novig</td><td class='pos'>+0.8%</td></tr>
-<tr><td class='l'>Jets @ Bears</td><td class='l'>Soldier Field</td><td class=''>7</td><td>8</td><td>71</td><td>0</td><td>43.1</td><td>+0.0</td><td>43.1</td><td class='l'>Under 42.5 +111 @ novig</td><td class='pos'>+0.7%</td></tr>
-<tr><td class='l'>Broncos @ 49ers</td><td class='l'>Levi&#x27;s Stadium</td><td class=''>6</td><td>7</td><td>88</td><td>0</td><td>48.1</td><td>+0.0</td><td>48.1</td><td class='l'>Under 47.5 +108 @ novig</td><td class='pos'>+0.0%</td></tr>
-<tr><td class='l'>Chargers @ Seahawks</td><td class='l'>Lumen Field</td><td class=''>5</td><td>4</td><td>73</td><td>0</td><td>42.9</td><td>+0.0</td><td>42.9</td><td class='l'>Under 42.5 +106 @ novig</td><td class='pos'>+0.3%</td></tr>
-<tr><td class='l'>Colts @ Commanders</td><td class='l'>Tottenham Hotspur Stadium</td><td class=''>5</td><td>12</td><td>66</td><td>0</td><td>48.3</td><td>+0.0</td><td>48.3</td><td class='l'>Under 47.5 +113 @ novig</td><td class='pos'>+0.7%</td></tr>
-<tr><td class='l'>Titans @ Ravens</td><td class='l'>M&amp;T Bank Stadium</td><td class=''>5</td><td>12</td><td>61</td><td>58</td><td>42.6</td><td>+0.0</td><td>42.6</td><td class='l'>Under 41.5 +113 @ novig</td><td class='neg'>-0.1%</td></tr>
-<tr><td class='l'>Jaguars @ Bengals</td><td class='l'>Paycor Stadium</td><td class=''>3</td><td>4</td><td>74</td><td>0</td><td>51.7</td><td>+0.0</td><td>51.7</td><td class='l'>Under 50.5 +120 @ novig</td><td class='pos'>+0.9%</td></tr>
-<tr><td class='l'>Lions @ Panthers</td><td class='l'>Bank of America Stadium</td><td class=''>2</td><td>4</td><td>64</td><td>54</td><td>51.0</td><td>+0.0</td><td>51.0</td><td class='l'>Under 50.5 +111 @ novig</td><td class='pos'>+1.0%</td></tr>
-</table></div><div class='note'>Wind adjustment fitted on 2010-2025 outdoor games: the market under-shot totals by ~1.3 pts at 12-15 mph and ~1.6 at 15-20 mph, and fully priced 20+. The screener fires at 12+ mph.</div>
-<h2>Sharp line moves with a lagging book</h2><div class='wrap'><table><tr><th class='l'>Game</th><th class='l'>Bet</th><th class='l'>Book</th><th>Price</th><th>Sharp move</th><th>Since (UTC)</th><th>Edge</th><th>EV</th></tr>
-<tr><td class='l'>Texans @ Titans</td><td class='l'>Titans +6.5</td><td class='l'>fanduel</td><td>-105</td><td class='pos'>+9.0 → +7.2</td><td>10-02 00:30</td><td class='neg'>-2.0%</td><td class='neg'>-4.0%</td></tr>
-<tr><td class='l'>Texans @ Titans</td><td class='l'>Titans +6.5</td><td class='l'>novig</td><td>-108</td><td class='pos'>+9.0 → +7.2</td><td>10-02 00:30</td><td class='neg'>-2.8%</td><td class='neg'>-5.3%</td></tr>
-<tr><td class='l'>Ravens @ Falcons</td><td class='l'>Falcons +6.5</td><td class='l'>fanduel</td><td>-114</td><td class='pos'>+8.8 → +7.0</td><td>10-01 01:30</td><td class='neg'>-3.1%</td><td class='neg'>-5.9%</td></tr>
-<tr><td class='l'>Texans @ Titans</td><td class='l'>Titans +6.5</td><td class='l'>draftkings</td><td>-110</td><td class='pos'>+9.0 → +7.2</td><td>10-02 00:30</td><td class='neg'>-3.2%</td><td class='neg'>-6.1%</td></tr>
-<tr><td class='l'>Ravens @ Falcons</td><td class='l'>Falcons +6.5</td><td class='l'>novig</td><td>-117</td><td class='pos'>+8.8 → +7.0</td><td>10-01 01:30</td><td class='neg'>-3.8%</td><td class='neg'>-7.0%</td></tr>
-<tr><td class='l'>Ravens @ Falcons</td><td class='l'>Falcons +6.0</td><td class='l'>draftkings</td><td>-110</td><td class='pos'>+8.8 → +7.0</td><td>10-01 01:30</td><td class='neg'>-4.5%</td><td class='neg'>-8.3%</td></tr>
-<tr><td class='l'>Lions @ Cardinals</td><td class='l'>Under 52.5</td><td class='l'>draftkings</td><td>-110</td><td class='pos'>+52.8 → +51.5</td><td>09-30 17:30</td><td class='pos'>+0.6%</td><td class='pos'>+1.1%</td></tr>
-<tr><td class='l'>Lions @ Cardinals</td><td class='l'>Under 51.5</td><td class='l'>fanduel</td><td>-110</td><td class='pos'>+52.8 → +51.5</td><td>09-30 17:30</td><td class='neg'>-2.4%</td><td class='neg'>-4.5%</td></tr>
-<tr><td class='l'>Cardinals @ Giants</td><td class='l'>Cardinals -2.5</td><td class='l'>fanduel</td><td>-111</td><td class='pos'>+1.2 → +2.5</td><td>09-30 17:30</td><td class='neg'>-0.6%</td><td class='neg'>-1.1%</td></tr>
-<tr><td class='l'>Cardinals @ Giants</td><td class='l'>Cardinals -2.5</td><td class='l'>draftkings</td><td>-112</td><td class='pos'>+1.2 → +2.5</td><td>09-30 17:30</td><td class='neg'>-0.8%</td><td class='neg'>-1.5%</td></tr>
-<tr><td class='l'>Dolphins @ Vikings</td><td class='l'>Vikings -10.5</td><td class='l'>novig</td><td>+104</td><td class='pos'>-10.8 → -11.8</td><td>10-02 12:17</td><td class='pos'>+0.5%</td><td class='pos'>+1.1%</td></tr>
-<tr><td class='l'>Dolphins @ Vikings</td><td class='l'>Vikings -10.5</td><td class='l'>draftkings</td><td>-108</td><td class='pos'>-10.8 → -11.8</td><td>10-02 12:17</td><td class='neg'>-2.4%</td><td class='neg'>-4.6%</td></tr>
-<tr><td class='l'>Dolphins @ Vikings</td><td class='l'>Vikings -10.5</td><td class='l'>fanduel</td><td>-115</td><td class='pos'>-10.8 → -11.8</td><td>10-02 12:17</td><td class='neg'>-4.0%</td><td class='neg'>-7.4%</td></tr>
-<tr><td class='l'>Broncos @ 49ers</td><td class='l'>Over 47.5</td><td class='l'>fanduel</td><td>-112</td><td class=''>+47.2 → +48.1</td><td>09-29 20:30</td><td class='neg'>-0.9%</td><td class='neg'>-1.8%</td></tr>
-<tr><td class='l'>Bengals @ Dolphins</td><td class='l'>Dolphins moneyline</td><td class='l'>novig</td><td>+413</td><td class=''>12% → 16%</td><td>09-30 17:30</td><td class='neg'>-3.1%</td><td class='neg'>-16.2%</td></tr>
-<tr><td class='l'>Bengals @ Dolphins</td><td class='l'>Dolphins moneyline</td><td class='l'>fanduel</td><td>+410</td><td class=''>12% → 16%</td><td>09-30 17:30</td><td class='neg'>-3.3%</td><td class='neg'>-16.6%</td></tr>
-<tr><td class='l'>Browns @ Jets</td><td class='l'>Browns moneyline</td><td class='l'>novig</td><td>+104</td><td class=''>57% → 53%</td><td>10-02 03:30</td><td class='neg'>-2.2%</td><td class='neg'>-4.4%</td></tr>
-<tr><td class='l'>Vikings @ Saints</td><td class='l'>Over 44.5</td><td class='l'>draftkings</td><td>-115</td><td class=''>+45.1 → +46.0</td><td>09-30 17:30</td><td class='pos'>+0.9%</td><td class='pos'>+1.6%</td></tr>
-<tr><td class='l'>Vikings @ Saints</td><td class='l'>Over 46.5</td><td class='l'>fanduel</td><td>-104</td><td class=''>+45.1 → +46.0</td><td>09-30 17:30</td><td class='neg'>-2.6%</td><td class='neg'>-5.0%</td></tr>
-<tr><td class='l'>Bills @ Rams</td><td class='l'>Over 52.5</td><td class='l'>draftkings</td><td>-110</td><td class=''>+52.7 → +53.5</td><td>09-30 17:30</td><td class='pos'>+0.6%</td><td class='pos'>+1.1%</td></tr>
-</table></div><div class='note'>A sharp move is a change of 0.5+ points (2%+ on moneylines) in the Pinnacle / Novig / Kalshi consensus between snapshots; a book is lagging if it moved less than half that. Historically the side the market moved toward covers 55-58% at the old number.</div>
-<h2>What's working</h2>
-<div class='wrap' style='margin-bottom:12px'><table><tr><th class='l'>rank_bucket</th><th>candidates</th><th>graded</th><th>W-L-P</th><th>hit%</th><th>avg fair%</th><th>avg edge%</th><th>ROI%</th><th>n CLV</th><th>mean CLV%</th></tr>
-<tr><td class='l'>3-5</td><td>25</td><td>23</td><td>11-12-0</td><td>47.8</td><td>50.6</td><td>2.12</td><td>-1.3</td><td>23</td><td>1.53</td></tr>
-<tr><td class='l'>6+</td><td>43</td><td>35</td><td>14-21-0</td><td>40.0</td><td>50.1</td><td>0.95</td><td>-19.7</td><td>35</td><td>0.68</td></tr>
-<tr><td class='l'>picks (1-2)</td><td>20</td><td>18</td><td>14-4-0</td><td>77.8</td><td>42.0</td><td>2.37</td><td>98.8</td><td>18</td><td>1.33</td></tr>
-</table></div>
-<div class='wrap' style='margin-bottom:12px'><table><tr><th class='l'>strategy</th><th>candidates</th><th>graded</th><th>W-L-P</th><th>hit%</th><th>avg fair%</th><th>avg edge%</th><th>ROI%</th><th>n CLV</th><th>mean CLV%</th></tr>
-<tr><td class='l'>execution</td><td>50</td><td>41</td><td>23-18-0</td><td>56.1</td><td>48.7</td><td>1.56</td><td>15.2</td><td>41</td><td>0.73</td></tr>
-<tr><td class='l'>lag</td><td>14</td><td>13</td><td>4-9-0</td><td>30.8</td><td>37.3</td><td>2.05</td><td>23.1</td><td>13</td><td>2.4</td></tr>
-<tr><td class='l'>teaser</td><td>16</td><td>14</td><td>5-9-0</td><td>35.7</td><td>54.7</td><td>0.12</td><td>-34.5</td><td>14</td><td>0.96</td></tr>
-<tr><td class='l'>wind</td><td>8</td><td>8</td><td>7-1-0</td><td>87.5</td><td>53.2</td><td>4.12</td><td>77.3</td><td>8</td><td>1.03</td></tr>
-</table></div>
-<div class='note'>Proving a 55% bettor beats break-even by P&L takes ~1,400 bets; closing-line value gets there in 50-200. Currently 76 candidates with CLV, 76 graded. Size-up gate: mean CLV &gt; +1% with the 95% interval excluding zero.</div>
-<h2>Fair lines vs your books</h2><div class='wrap'><table><tr><th class='l'>Game</th><th>Kick (UTC)</th><th>Fair spread</th><th>Fair total</th><th>Fair ML</th><th>DK spread</th><th>FD spread</th><th>Novig spread</th><th>DK total</th><th>FD total</th><th>Novig total</th></tr>
-<tr><td class='l'>Colts @ Commanders</td><td>10-04 13:30</td><td>+3.75</td><td>48.3</td><td>+182</td><td></td><td></td><td></td><td>48.5 u-112 <span class='neg'>-2.2%</span></td><td>48.5 u-122 <span class='neg'>-4.4%</span></td><td>48.5 u-104 <span class='neg'>-0.4%</span></td></tr>
-<tr><td class='l'>Packers @ Buccaneers</td><td>10-04 17:00</td><td>+3.25</td><td>38.8</td><td>+169</td><td>+3.5 (-108) <span class='neg'>-0.4%</span></td><td>+3.5 (-110) <span class='neg'>-0.8%</span></td><td>+3.5 (-111) <span class='neg'>-1.1%</span></td><td>38.5 u-108 <span class='neg'>-2.8%</span></td><td>38.5 u-105 <span class='neg'>-2.1%</span></td><td>38.5 u+100 <span class='neg'>-0.9%</span></td></tr>
-<tr><td class='l'>Titans @ Ravens</td><td>10-04 17:00</td><td>-12.50</td><td>42.6</td><td>-600</td><td>-11.5 (-108) <span class='neg'>-2.6%</span></td><td>-11.5 (-115) <span class='neg'>-4.2%</span></td><td>-11.5 (+100) <span class='neg'>-0.7%</span></td><td>42.5 u-112 <span class='neg'>-3.0%</span></td><td>42.5 u-108 <span class='neg'>-2.1%</span></td><td>42.5 u+100 <span class='neg'>-0.2%</span></td></tr>
-<tr><td class='l'>Cowboys @ Texans</td><td>10-04 17:00</td><td>-3.50</td><td>48.4</td><td>-148</td><td>-3.0 (-110) <span class='neg'>-1.7%</span></td><td>-3.0 (-110) <span class='neg'>-1.7%</span></td><td></td><td>48.5 u-115 <span class='neg'>-3.1%</span></td><td>48.5 u-118 <span class='neg'>-3.7%</span></td><td>48.5 u-104 <span class='neg'>-0.6%</span></td></tr>
-<tr><td class='l'>Jets @ Bears</td><td>10-04 17:00</td><td>-4.00</td><td>43.1</td><td>-167</td><td>-3.5 (-105) <span class='neg'>-0.6%</span></td><td>-3.5 (-104) <span class='neg'>-0.4%</span></td><td>-3.5 (+106) <span class='pos'>+2.1%</span></td><td></td><td></td><td></td></tr>
-<tr><td class='l'>Cardinals @ Giants</td><td>10-04 17:00</td><td>+2.50</td><td>44.1</td><td>+130</td><td>+2.5 (-108) <span class='neg'>-4.0%</span></td><td>+2.5 (-115) <span class='neg'>-5.5%</span></td><td>+2.5 (+102) <span class='neg'>-1.6%</span></td><td>44.5 u-112 <span class='neg'>-1.8%</span></td><td>44.5 u-125 <span class='neg'>-4.5%</span></td><td>44.5 u+100 <span class='neg'>-1.0%</span></td></tr>
-<tr><td class='l'>Patriots @ Bills</td><td>10-04 17:00</td><td>-7.00</td><td>48.9</td><td>-292</td><td>-7.0 (-105) <span class='neg'>-2.0%</span></td><td></td><td></td><td>48.5 u-105 <span class='neg'>-2.3%</span></td><td>48.5 u-106 <span class='neg'>-2.5%</span></td><td>48.5 u+104 <span class='neg'>-0.1%</span></td></tr>
-<tr><td class='l'>Jaguars @ Bengals</td><td>10-04 17:00</td><td>-3.00</td><td>51.7</td><td>-136</td><td></td><td></td><td></td><td>51.5 u-118 <span class='neg'>-4.8%</span></td><td>51.5 u-115 <span class='neg'>-4.2%</span></td><td>51.5 u+100 <span class='neg'>-0.7%</span></td></tr>
-<tr><td class='l'>Rams @ Eagles</td><td>10-04 17:00</td><td>+3.75</td><td>42.9</td><td>+178</td><td>+3.5 (-108) <span class='neg'>-2.8%</span></td><td>+3.5 (-105) <span class='neg'>-2.1%</span></td><td>+3.5 (+100) <span class='neg'>-0.9%</span></td><td></td><td></td><td></td></tr>
-<tr><td class='l'>Dolphins @ Vikings</td><td>10-04 20:05</td><td>-11.75</td><td>38.8</td><td>-522</td><td>-10.5 (-108) <span class='neg'>-2.4%</span></td><td>-10.5 (-115) <span class='neg'>-4.0%</span></td><td>-10.5 (+104) <span class='pos'>+0.5%</span></td><td></td><td></td><td></td></tr>
-<tr><td class='l'>Chargers @ Seahawks</td><td>10-04 20:25</td><td>-7.25</td><td>42.9</td><td>-311</td><td>-7.0 (-115) <span class='neg'>-1.3%</span></td><td>-7.0 (-115) <span class='neg'>-1.3%</span></td><td></td><td>42.5 u-102 <span class='neg'>-1.7%</span></td><td>42.5 u-104 <span class='neg'>-2.1%</span></td><td>42.5 u+106 <span class='pos'>+0.3%</span></td></tr>
-<tr><td class='l'>Broncos @ 49ers</td><td>10-04 20:25</td><td>-3.00</td><td>48.1</td><td>-133</td><td>-2.5 (-130) <span class='neg'>-4.1%</span></td><td>-2.5 (-120) <span class='neg'>-2.1%</span></td><td>-2.5 (-108) <span class='pos'>+0.5%</span></td><td></td><td></td><td></td></tr>
-<tr><td class='l'>Chiefs @ Raiders</td><td>10-04 20:25</td><td>+4.00</td><td>47.7</td><td>+191</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td class='l'>Lions @ Panthers</td><td>10-05 00:20</td><td>+3.75</td><td>51.0</td><td>+181</td><td>+3.5 (-108) <span class='neg'>-2.8%</span></td><td>+3.5 (-104) <span class='neg'>-1.9%</span></td><td>+3.5 (+102) <span class='neg'>-0.4%</span></td><td></td><td></td><td></td></tr>
-<tr><td class='l'>Falcons @ Saints</td><td>10-06 00:15</td><td>-2.25</td><td>48.1</td><td>-127</td><td>-2.5 (-112) <span class='neg'>-3.0%</span></td><td>-2.5 (-118) <span class='neg'>-4.3%</span></td><td>-2.5 (+100) <span class='neg'>-0.1%</span></td><td></td><td></td><td></td></tr>
-<tr><td class='l'>Buccaneers @ Cowboys</td><td>10-09 00:15</td><td>-9.75</td><td>47.2</td><td>-435</td><td>-9.5 (-110) <span class='neg'>-1.8%</span></td><td>-9.5 (-110) <span class='neg'>-1.8%</span></td><td>-9.5 (-106) <span class='neg'>-0.9%</span></td><td>47.5 u-110 <span class='neg'>-1.6%</span></td><td></td><td>47.5 u-127 <span class='neg'>-5.2%</span></td></tr>
-</table></div><div class='note'>Spreads from the home team's side (negative = home lays points). The edge beside a quote is for the home spread / the under.</div>
-<h2>All positive-EV prices (background)</h2><div class='wrap'><table><tr><th class='l'>Game</th><th class='l'>Bet</th><th class='l'>Book</th><th>Price</th><th>Fair price</th><th>Fair win%</th><th>Edge</th><th>EV/unit</th><th>Liquidity</th><th class='l'>Notes</th></tr>
-<tr><td class='l'>Chargers @ Seahawks</td><td class='l'>Seahawks -14.5</td><td class='l'>novig</td><td>+270</td><td>+203</td><td>33.0</td><td class='pos'>+5.9%</td><td class='pos'>+22.0%</td><td></td><td class='l dim'>alt line</td></tr>
-<tr><td class='l'>Chargers @ Seahawks</td><td class='l'>Seahawks -16.5</td><td class='l'>novig</td><td>+300</td><td>+242</td><td>29.3</td><td class='pos'>+4.3%</td><td class='pos'>+17.1%</td><td></td><td class='l dim'>alt line</td></tr>
-<tr><td class='l'>Chargers @ Seahawks</td><td class='l'>Seahawks -17.5</td><td class='l'>novig</td><td>+344</td><td>+282</td><td>26.2</td><td class='pos'>+3.6%</td><td class='pos'>+16.1%</td><td></td><td class='l dim'>alt line</td></tr>
-<tr><td class='l'>Patriots @ Bills</td><td class='l'>Bills -14.5</td><td class='l'>novig</td><td>+277</td><td>+225</td><td>30.8</td><td class='pos'>+4.2%</td><td class='pos'>+16.0%</td><td>$2,808</td><td class='l dim'>crosses 7; alt line</td></tr>
-<tr><td class='l'>Dolphins @ Vikings</td><td class='l'>Vikings -20.5</td><td class='l'>novig</td><td>+317</td><td>+274</td><td>26.8</td><td class='pos'>+2.8%</td><td class='pos'>+11.5%</td><td></td><td class='l dim'>alt line</td></tr>
-<tr><td class='l'>Chargers @ Seahawks</td><td class='l'>Seahawks -19.5</td><td class='l'>fanduel</td><td>+400</td><td>+349</td><td>22.3</td><td class='pos'>+2.3%</td><td class='pos'>+11.4%</td><td></td><td class='l dim'>alt line</td></tr>
-<tr><td class='l'>Chargers @ Seahawks</td><td class='l'>Seahawks -13.5</td><td class='l'>novig</td><td>+199</td><td>+169</td><td>37.2</td><td class='pos'>+3.8%</td><td class='pos'>+11.2%</td><td></td><td class='l dim'>alt line</td></tr>
-<tr><td class='l'>Titans @ Ravens</td><td class='l'>Under 32.5</td><td class='l'>fanduel</td><td>+390</td><td>+342</td><td>22.7</td><td class='pos'>+2.2%</td><td class='pos'>+11.0%</td><td></td><td class='l dim'>alt line</td></tr>
-<tr><td class='l'>Patriots @ Bills</td><td class='l'>Bills -13.5</td><td class='l'>novig</td><td>+223</td><td>+191</td><td>34.4</td><td class='pos'>+3.4%</td><td class='pos'>+11.0%</td><td></td><td class='l dim'>crosses 7; alt line</td></tr>
-<tr><td class='l'>Dolphins @ Vikings</td><td class='l'>Vikings -17.5</td><td class='l'>novig</td><td>+239</td><td>+206</td><td>32.7</td><td class='pos'>+3.2%</td><td class='pos'>+10.8%</td><td></td><td class='l dim'>alt line</td></tr>
-<tr><td class='l'>Patriots @ Bills</td><td class='l'>Bills -16.5</td><td class='l'>novig</td><td>+300</td><td>+264</td><td>27.5</td><td class='pos'>+2.5%</td><td class='pos'>+9.8%</td><td>$382</td><td class='l dim'>crosses 7; alt line</td></tr>
-<tr><td class='l'>Patriots @ Bills</td><td class='l'>Bills -17.5</td><td class='l'>novig</td><td>+355</td><td>+314</td><td>24.1</td><td class='pos'>+2.2%</td><td class='pos'>+9.8%</td><td>$337</td><td class='l dim'>crosses 7; alt line</td></tr>
-<tr><td class='l'>Chargers @ Seahawks</td><td class='l'>Seahawks -17.5</td><td class='l'>fanduel</td><td>+320</td><td>+282</td><td>26.2</td><td class='pos'>+2.3%</td><td class='pos'>+9.8%</td><td></td><td class='l dim'>alt line</td></tr>
-<tr><td class='l'>Titans @ Ravens</td><td class='l'>Ravens -23.5</td><td class='l'>fanduel</td><td>+390</td><td>+347</td><td>22.4</td><td class='pos'>+2.0%</td><td class='pos'>+9.7%</td><td></td><td class='l dim'>alt line</td></tr>
-<tr><td class='l'>Cardinals @ Giants</td><td class='l'>Cardinals -7.5</td><td class='l'>novig</td><td>+264</td><td>+233</td><td>30.1</td><td class='pos'>+2.6%</td><td class='pos'>+9.4%</td><td>$2,766</td><td class='l dim'>crosses 3/7; alt line</td></tr>
-<tr><td class='l'>Titans @ Ravens</td><td class='l'>Ravens -23.5</td><td class='l'>novig</td><td>+388</td><td>+347</td><td>22.4</td><td class='pos'>+1.9%</td><td class='pos'>+9.3%</td><td></td><td class='l dim'>alt line</td></tr>
-<tr><td class='l'>Dolphins @ Vikings</td><td class='l'>Under 28.5</td><td class='l'>fanduel</td><td>+390</td><td>+350</td><td>22.2</td><td class='pos'>+1.8%</td><td class='pos'>+8.9%</td><td></td><td class='l dim'>alt line</td></tr>
-<tr><td class='l'>Chargers @ Seahawks</td><td class='l'>Seahawks -14.5</td><td class='l'>fanduel</td><td>+230</td><td>+203</td><td>33.0</td><td class='pos'>+2.7%</td><td class='pos'>+8.8%</td><td></td><td class='l dim'>alt line</td></tr>
-<tr><td class='l'>Dolphins @ Vikings</td><td class='l'>Vikings -23.5</td><td class='l'>fanduel</td><td>+400</td><td>+360</td><td>21.7</td><td class='pos'>+1.7%</td><td class='pos'>+8.7%</td><td></td><td class='l dim'>alt line</td></tr>
-<tr><td class='l'>Dolphins @ Vikings</td><td class='l'>Under 28.5</td><td class='l'>draftkings</td><td>+388</td><td>+350</td><td>22.2</td><td class='pos'>+1.7%</td><td class='pos'>+8.5%</td><td></td><td class='l dim'>alt line</td></tr>
-<tr><td class='l'>Cardinals @ Giants</td><td class='l'>Cardinals -11.5</td><td class='l'>fanduel</td><td>+390</td><td>+352</td><td>22.1</td><td class='pos'>+1.7%</td><td class='pos'>+8.3%</td><td></td><td class='l dim'>crosses 3/7; alt line</td></tr>
-<tr><td class='l'>Cardinals @ Giants</td><td class='l'>Cardinals -10.5</td><td class='l'>novig</td><td>+355</td><td>+321</td><td>23.7</td><td class='pos'>+1.8%</td><td class='pos'>+8.0%</td><td></td><td class='l dim'>crosses 3/7; alt line</td></tr>
-<tr><td class='l'>Chargers @ Seahawks</td><td class='l'>Seahawks -13.5</td><td class='l'>fanduel</td><td>+190</td><td>+169</td><td>37.2</td><td class='pos'>+2.7%</td><td class='pos'>+7.9%</td><td></td><td class='l dim'>alt line</td></tr>
-<tr><td class='l'>Chargers @ Seahawks</td><td class='l'>Seahawks -10.5</td><td class='l'>novig</td><td>+150</td><td>+132</td><td>43.1</td><td class='pos'>+3.1%</td><td class='pos'>+7.7%</td><td></td><td class='l dim'>alt line</td></tr>
-<tr><td class='l'>Cardinals @ Giants</td><td class='l'>Cardinals -8.5</td><td class='l'>fanduel</td><td>+285</td><td>+258</td><td>28.0</td><td class='pos'>+2.0%</td><td class='pos'>+7.6%</td><td></td><td class='l dim'>crosses 3/7; alt line</td></tr>
-</table></div>
-<h2>Paper ledger</h2>
-<div class='wrap'><table><tr><th>#</th><th>Wk</th><th class='l'>Game</th><th class='l'>Bet</th><th class='l'>Book</th><th>Price</th><th>Units</th><th>Edge</th><th class='l'>Strategy</th><th>CLV</th><th class='l'>Result</th><th>P&L</th></tr>
-<tr><td>1</td><td>1</td><td class='l'>Broncos @ Chiefs</td><td class='l'>Under 42.5</td><td class='l'>novig</td><td>+113</td><td>1.0</td><td class='pos'>+4.3%</td><td class='l'>wind</td><td class='pos'>+2.37%</td><td class='l'>win</td><td class='pos'>+1.13</td></tr>
-<tr><td>2</td><td>1</td><td class='l'>Falcons @ Steelers</td><td class='l'>Steelers -2.5</td><td class='l'>novig</td><td>-144</td><td>1.0</td><td class='pos'>+2.1%</td><td class='l'>execution</td><td class='pos'>+7.65%</td><td class='l'>win</td><td class='pos'>+0.69</td></tr>
-<tr><td>3</td><td>1</td><td class='l'>49ers @ Rams</td><td class='l'>Under 33.5</td><td class='l'>novig</td><td>+641</td><td>1.0</td><td class='pos'>+1.1%</td><td class='l'>lag</td><td class='pos'>+1.12%</td><td class='l'>loss</td><td class='neg'>-1.00</td></tr>
-<tr><td>4</td><td>1</td><td class='l'>Broncos @ Chiefs</td><td class='l'>Under 43.5</td><td class='l'>novig</td><td>+100</td><td>1.0</td><td class='pos'>+4.0%</td><td class='l'>wind</td><td class='pos'>+2.29%</td><td class='l'>win</td><td class='pos'>+1.00</td></tr>
-<tr><td>5</td><td>1</td><td class='l'>Broncos @ Chiefs</td><td class='l'>Under 42.5</td><td class='l'>novig</td><td>+113</td><td>1.0</td><td class='pos'>+4.4%</td><td class='l'>wind</td><td class='pos'>+2.37%</td><td class='l'>win</td><td class='pos'>+1.13</td></tr>
-<tr><td>6</td><td>1</td><td class='l'>Ravens @ Colts</td><td class='l'>Ravens -3.5</td><td class='l'>novig</td><td>+115</td><td>1.0</td><td class='pos'>+1.9%</td><td class='l'>execution</td><td class='neg'>-1.67%</td><td class='l'>win</td><td class='pos'>+1.15</td></tr>
-<tr><td>7</td><td>2</td><td class='l'>Packers @ Jets</td><td class='l'>Packers -2.5</td><td class='l'>novig</td><td>-133</td><td>1.0</td><td class='pos'>+3.4%</td><td class='l'>execution</td><td class='neg'>-2.42%</td><td class='l'>win</td><td class='pos'>+0.75</td></tr>
-<tr><td>8</td><td>2</td><td class='l'>Seahawks @ Cardinals</td><td class='l'>Seahawks -4.5</td><td class='l'>novig</td><td>+113</td><td>1.0</td><td class='pos'>+2.1%</td><td class='l'>execution</td><td class='pos'>+0.34%</td><td class='l'>win</td><td class='pos'>+1.13</td></tr>
-<tr><td>9</td><td>2</td><td class='l'>Browns @ Buccaneers</td><td class='l'>Browns -16.5</td><td class='l'>fanduel</td><td>+3000</td><td>1.0</td><td class='pos'>+1.4%</td><td class='l'>lag</td><td class='pos'>+0.01%</td><td class='l'>loss</td><td class='neg'>-1.00</td></tr>
-<tr><td>10</td><td>2</td><td class='l'>Steelers @ Patriots</td><td class='l'>Under 25.5</td><td class='l'>novig</td><td>+900</td><td>1.0</td><td class='pos'>+2.7%</td><td class='l'>lag</td><td class='pos'>+2.16%</td><td class='l'>win</td><td class='pos'>+9.00</td></tr>
-<tr><td>11</td><td>2</td><td class='l'>Eagles @ Titans</td><td class='l'>Titans +4.5</td><td class='l'>novig</td><td>+144</td><td>1.0</td><td class='pos'>+2.8%</td><td class='l'>lag</td><td class='pos'>+2.88%</td><td class='l'>win</td><td class='pos'>+1.44</td></tr>
-<tr><td>12</td><td>2</td><td class='l'>Packers @ Jets</td><td class='l'>Jets +3.5</td><td class='l'>draftkings</td><td>-105</td><td>1.0</td><td class='pos'>+2.4%</td><td class='l'>execution</td><td class='pos'>+2.35%</td><td class='l'>win</td><td class='pos'>+0.95</td></tr>
-<tr><td>13</td><td>3</td><td class='l'>Cardinals @ 49ers</td><td class='l'>49ers -2.5 &amp; Titans +8.5 (6-pt teaser)</td><td class='l'>draftkings</td><td>-120</td><td>1.0</td><td class='neg'>-0.1%</td><td class='l'>teaser</td><td class='neg'>-0.02%</td><td class='l'>win</td><td class='pos'>+0.83</td></tr>
-<tr><td>14</td><td>3</td><td class='l'>Titans @ Giants</td><td class='l'>Titans +8.5 &amp; Colts +8.5 (6-pt teaser)</td><td class='l'>draftkings</td><td>-120</td><td>1.0</td><td class='neg'>-2.5%</td><td class='l'>teaser</td><td class='pos'>+1.20%</td><td class='l'>win</td><td class='pos'>+0.83</td></tr>
-<tr><td>15</td><td>3</td><td class='l'>Rams @ Broncos</td><td class='l'>Broncos +8.5 &amp; 49ers -2.5 (6-pt teaser)</td><td class='l'>draftkings</td><td>-120</td><td>1.0</td><td class='pos'>+5.0%</td><td class='l'>teaser</td><td class='pos'>+1.45%</td><td class='l'>win</td><td class='pos'>+0.83</td></tr>
-<tr><td>16</td><td>3</td><td class='l'>Titans @ Giants</td><td class='l'>Under 38.5</td><td class='l'>fanduel</td><td>-111</td><td>1.0</td><td class='pos'>+2.9%</td><td class='l'>wind</td><td class='neg'>-0.11%</td><td class='l'>win</td><td class='pos'>+0.90</td></tr>
-<tr><td>17</td><td>3</td><td class='l'>Cardinals @ 49ers</td><td class='l'>Cardinals -15.5</td><td class='l'>fanduel</td><td>+3000</td><td>1.0</td><td class='pos'>+1.7%</td><td class='l'>lag</td><td class='pos'>+0.01%</td><td class='l'>loss</td><td class='neg'>-1.00</td></tr>
-<tr><td>18</td><td>3</td><td class='l'>Seahawks @ Commanders</td><td class='l'>Under 25.5</td><td class='l'>novig</td><td>+770</td><td>1.0</td><td class='pos'>+2.8%</td><td class='l'>lag</td><td class='pos'>+2.01%</td><td class='l'>loss</td><td class='neg'>-1.00</td></tr>
-<tr><td>19</td><td>4</td><td class='l'>Rams @ Eagles</td><td class='l'>Eagles +2.5</td><td class='l'>novig</td><td>+135</td><td>1.0</td><td class='pos'>+2.8%</td><td class='l'>execution</td><td class=''></td><td class='l'></td><td class=''></td></tr>
-<tr><td>20</td><td>4</td><td class='l'>Titans @ Ravens</td><td class='l'>Titans +10.5</td><td class='l'>novig</td><td>+113</td><td>1.0</td><td class='pos'>+2.4%</td><td class='l'>execution</td><td class=''></td><td class='l'></td><td class=''></td></tr>
-</table></div>
-<h2>Baselines behind the plan</h2><div class='wrap'><table><tr><th class='l'>Blind strategy (closing lines, 1u per bet)</th><th>n</th><th>Win %</th><th>ROI</th></tr><tr><td class='l'>Moneyline favorites -500 or shorter</td><td>532</td><td>87.4</td><td class='neg'>-0.4%</td></tr><tr><td class='l'>Moneyline favorites -300 to -500</td><td>1,005</td><td>77.2</td><td class='neg'>-1.7%</td></tr><tr><td class='l'>Moneyline favorites -200 to -300</td><td>1,219</td><td>69.0</td><td class='neg'>-2.4%</td></tr><tr><td class='l'>All moneyline favorites (2006-2025)</td><td>5,281</td><td>66.4</td><td class='neg'>-3.5%</td></tr><tr><td class='l'>Spread favorites at -110 (1999-2025)</td><td>7,081</td><td>48.7</td><td class='neg'>-7.0%</td></tr><tr><td class='l'>Outdoor unders, wind 12+ mph (2020-2025)</td><td>242</td><td>58.3</td><td class='pos'>+11.2%</td></tr><tr><td class='l'>Wong teaser legs through 3 and 7 (2010-2025)</td><td>952</td><td>75.2</td><td class='pos'>+EV at -120 or better</td></tr></table></div>
-<div class='foot'>Built 2026-10-02 13:32 UTC · <code>make dashboard</code> · fair value = de-vigged sharp consensus translated with the key-number model · plan in <code>docs/PLAN.md</code></div></div></main>
+<p class='note'>Every candidate from every strategy is ranked by expected return per unit. The picks are the best two with positive EV, one per game, skipping games already picked earlier this week. #1 is Bears -3.5 at +106 on Novig (a stale line after a sharp move, EV +4.3%); #2 is Cardinals -3.5 at +135 on Novig (a price edge, EV +4.2%). Also on the card: Titans +10.5 +4.1% (game already picked); Vikings -11.5 +3.4%; Over 43.5 +2.6% (game already picked). Nothing this week clears the betting gate, so treat both picks as minimum-size.</p></section>
+<section><h2>Results</h2><div class='charts'><div class='card chart wide'><h3>Units won over the season</h3><div class='sub'>Our picks, 1 unit each, under the current rules. Tap a point for that day's bets.</div><div class='plot' id='c-cum'></div><details class='data'><summary>Show as table</summary><div class='tbl'><table><tr><th class="l">Day</th><th>Week</th><th>Units that day</th><th>Season total</th></tr><tr><td class="l">Sun Sep 13</td><td>1</td><td>+1.84</td><td>+1.84</td></tr><tr><td class="l">Mon Sep 14</td><td>1</td><td>+1.13</td><td>+2.97</td></tr><tr><td class="l">Sun Sep 20</td><td>2</td><td>+3.32</td><td>+6.30</td></tr><tr><td class="l">Sun Sep 27</td><td>3</td><td>+1.73</td><td>+8.03</td></tr></table></div></details></div><div class='card chart'><h3>Are we beating the closing line?</h3><div class='sub'>Average price advantage vs the final sharp line, with 95% range. Right of zero is good.</div><div class='plot' id='c-clv'></div><details class='data'><summary>Show as table</summary><div class='tbl'><table><tr><th class="l">Group</th><th>Bets</th><th>Average</th><th>95% range</th></tr><tr><td class="l">Our picks</td><td>8</td><td>+1.31%</td><td>-0.88% to +3.49%</td></tr><tr><td class="l">Every bet logged</td><td>71</td><td>+1.09%</td><td>+0.53% to +1.65%</td></tr><tr><td class="l">Line-move lag</td><td>8</td><td>+3.24%</td><td>+0.88% to +5.60%</td></tr><tr><td class="l">Wind unders</td><td>8</td><td>+1.03%</td><td>+0.25% to +1.81%</td></tr><tr><td class="l">Price edge</td><td>41</td><td>+0.73%</td><td>-0.00% to +1.46%</td></tr><tr><td class="l">Wong teasers</td><td>14</td><td>+0.96%</td><td>+0.01% to +1.91%</td></tr></table></div></details></div><div class='card chart'><h3>Week by week</h3><div class='sub'>Units won by our picks each week, with the record.</div><div class='plot' id='c-wk'></div><details class='data'><summary>Show as table</summary><div class='tbl'><table><tr><th class="l">Week</th><th>Record</th><th>Units</th></tr><tr><td class="l">1</td><td>3-0</td><td>+2.97</td></tr><tr><td class="l">2</td><td>3-0</td><td>+3.32</td></tr><tr><td class="l">3</td><td>2-0</td><td>+1.73</td></tr></table></div></details></div></div><p class='note'>Closing-line value is the measure that matters most: in the NFL the closing line is the sharpest estimate of the outcome, so consistently getting a better price than the close means a real edge long before the win-loss record can prove it.</p></section>
+<section><h2>More detail</h2>
+<details class='more'><summary>Sharp line moves<span>8 worth a look</span></summary><div class='inner'><div class='tbl'><table><tr><th class="l">Game</th><th>Bet</th><th>Book</th><th>Price</th><th>Sharp move</th><th>Edge</th></tr><tr><td class="l">Jets @ Bears</td><td>Bears -3.5</td><td>Novig</td><td>+106</td><td>-3.5 → -4.0</td><td><span class='pos'>+2.1%</span></td></tr><tr><td class="l">Vikings @ Saints</td><td>Saints moneyline</td><td>DraftKings</td><td>+120</td><td>45% → 47%</td><td><span class='pos'>+1.6%</span></td></tr><tr><td class="l">Vikings @ Saints</td><td>Over 44.5</td><td>DraftKings</td><td>-115</td><td>+45.1 → +46.0</td><td><span class='pos'>+0.9%</span></td></tr><tr><td class="l">Lions @ Cardinals</td><td>Under 52.5</td><td>DraftKings</td><td>-110</td><td>+52.8 → +51.5</td><td><span class='pos'>+0.6%</span></td></tr><tr><td class="l">Bills @ Rams</td><td>Over 52.5</td><td>DraftKings</td><td>-110</td><td>+52.7 → +53.5</td><td><span class='pos'>+0.6%</span></td></tr><tr><td class="l">Dolphins @ Vikings</td><td>Vikings -10.5</td><td>Novig</td><td>+104</td><td>-10.8 → -11.8</td><td><span class='pos'>+0.5%</span></td></tr><tr><td class="l">Broncos @ 49ers</td><td>49ers -2.5</td><td>Novig</td><td>-108</td><td>-2.5 → -3.0</td><td><span class='pos'>+0.5%</span></td></tr><tr><td class="l">Jaguars @ Bengals</td><td>Over 51.5</td><td>DraftKings</td><td>-102</td><td>+51.1 → +51.7</td><td><span class='pos'>+0.2%</span></td></tr></table></div><p class='note'>The sharp consensus moved, this book hasn't caught up, and its price is still better than fair. Historically the side the market moves toward covers 55–58% at the old number.</p></div></details>
+<details class='more'><summary>Kickoff wind<span>0 games at 12+ mph</span></summary><div class='inner'><div class='tbl'><table><tr><th class="l">Game</th><th>Wind mph</th><th>Gust</th><th>Temp</th><th>Total, wind-adjusted</th><th>Best under</th><th>Edge</th></tr><tr><td class="l">Cardinals @ Giants</td><td><span class=''>11</span></td><td>14</td><td>68°</td><td>44.1 → 44.1</td><td>Under 43.5 +111</td><td><span class='pos'>+0.7%</span></td></tr><tr><td class="l">Packers @ Buccaneers</td><td><span class=''>10</span></td><td>12</td><td>91°</td><td>38.8 → 38.8</td><td>Under 38.5 +100</td><td><span class='neg'>-0.9%</span></td></tr><tr><td class="l">Patriots @ Bills</td><td><span class=''>9</span></td><td>14</td><td>67°</td><td>48.9 → 48.9</td><td>Under 48.5 +104</td><td><span class='neg'>-0.1%</span></td></tr><tr><td class="l">Rams @ Eagles</td><td><span class=''>8</span></td><td>21</td><td>62°</td><td>42.9 → 42.9</td><td>Under 42.5 +108</td><td><span class='pos'>+0.8%</span></td></tr><tr><td class="l">Jets @ Bears</td><td><span class=''>7</span></td><td>8</td><td>71°</td><td>43.1 → 43.1</td><td>Under 42.5 +111</td><td><span class='pos'>+0.7%</span></td></tr><tr><td class="l">Broncos @ 49ers</td><td><span class=''>6</span></td><td>7</td><td>88°</td><td>48.1 → 48.1</td><td>Under 47.5 +108</td><td><span class='pos'>+0.0%</span></td></tr><tr><td class="l">Chargers @ Seahawks</td><td><span class=''>5</span></td><td>4</td><td>73°</td><td>42.9 → 42.9</td><td>Under 42.5 +106</td><td><span class='pos'>+0.3%</span></td></tr><tr><td class="l">Colts @ Commanders</td><td><span class=''>5</span></td><td>12</td><td>66°</td><td>48.3 → 48.3</td><td>Under 47.5 +113</td><td><span class='pos'>+0.7%</span></td></tr><tr><td class="l">Titans @ Ravens</td><td><span class=''>5</span></td><td>12</td><td>61°</td><td>42.6 → 42.6</td><td>Under 41.5 +113</td><td><span class='neg'>-0.1%</span></td></tr><tr><td class="l">Jaguars @ Bengals</td><td><span class=''>3</span></td><td>4</td><td>74°</td><td>51.7 → 51.7</td><td>Under 50.5 +120</td><td><span class='pos'>+0.9%</span></td></tr><tr><td class="l">Lions @ Panthers</td><td><span class=''>2</span></td><td>4</td><td>64°</td><td>51.0 → 51.0</td><td>Under 50.5 +111</td><td><span class='pos'>+1.0%</span></td></tr></table></div><p class='note'>Since 2010 the market has under-shot totals by about 1.3 points at 12–15 mph and 1.6 at 15–20 mph. The screener fires at 12+ mph.</p></div></details>
+<details class='more'><summary>Fair lines vs your books<span>home spread</span></summary><div class='inner'><div class='tbl'><table><tr><th class="l">Game</th><th>Kickoff ET</th><th>Fair spread</th><th>Fair total</th><th>DraftKings</th><th>FanDuel</th><th>Novig</th></tr><tr><td class="l">Colts @ Commanders</td><td>Sun 9:30 AM</td><td>+3.8</td><td>48.3</td><td></td><td></td><td></td></tr><tr><td class="l">Packers @ Buccaneers</td><td>Sun 1:00 PM</td><td>+3.2</td><td>38.8</td><td>+3.5 <span class='dim'>-108</span></td><td>+3.5 <span class='dim'>-110</span></td><td>+3.5 <span class='dim'>-111</span></td></tr><tr><td class="l">Titans @ Ravens</td><td>Sun 1:00 PM</td><td>-12.5</td><td>42.6</td><td>-11.5 <span class='dim'>-108</span></td><td>-11.5 <span class='dim'>-115</span></td><td>-11.5 <span class='dim'>+100</span></td></tr><tr><td class="l">Cowboys @ Texans</td><td>Sun 1:00 PM</td><td>-3.5</td><td>48.4</td><td>-3.0 <span class='dim'>-110</span></td><td>-3.0 <span class='dim'>-110</span></td><td></td></tr><tr><td class="l">Jets @ Bears</td><td>Sun 1:00 PM</td><td>-4.0</td><td>43.1</td><td>-3.5 <span class='dim'>-105</span></td><td>-3.5 <span class='dim'>-104</span></td><td>-3.5 <span class='dim'>+106</span></td></tr><tr><td class="l">Cardinals @ Giants</td><td>Sun 1:00 PM</td><td>+2.5</td><td>44.1</td><td>+2.5 <span class='dim'>-108</span></td><td>+2.5 <span class='dim'>-115</span></td><td>+2.5 <span class='dim'>+102</span></td></tr><tr><td class="l">Patriots @ Bills</td><td>Sun 1:00 PM</td><td>-7.0</td><td>48.9</td><td>-7.0 <span class='dim'>-105</span></td><td></td><td></td></tr><tr><td class="l">Jaguars @ Bengals</td><td>Sun 1:00 PM</td><td>-3.0</td><td>51.7</td><td></td><td></td><td></td></tr><tr><td class="l">Rams @ Eagles</td><td>Sun 1:00 PM</td><td>+3.8</td><td>42.9</td><td>+3.5 <span class='dim'>-108</span></td><td>+3.5 <span class='dim'>-105</span></td><td>+3.5 <span class='dim'>+100</span></td></tr><tr><td class="l">Dolphins @ Vikings</td><td>Sun 4:05 PM</td><td>-11.8</td><td>38.8</td><td>-10.5 <span class='dim'>-108</span></td><td>-10.5 <span class='dim'>-115</span></td><td>-10.5 <span class='dim'>+104</span></td></tr><tr><td class="l">Chargers @ Seahawks</td><td>Sun 4:25 PM</td><td>-7.2</td><td>42.9</td><td>-7.0 <span class='dim'>-115</span></td><td>-7.0 <span class='dim'>-115</span></td><td></td></tr><tr><td class="l">Broncos @ 49ers</td><td>Sun 4:25 PM</td><td>-3.0</td><td>48.1</td><td>-2.5 <span class='dim'>-130</span></td><td>-2.5 <span class='dim'>-120</span></td><td>-2.5 <span class='dim'>-108</span></td></tr><tr><td class="l">Chiefs @ Raiders</td><td>Sun 4:25 PM</td><td>+4.0</td><td>47.7</td><td></td><td></td><td></td></tr><tr><td class="l">Lions @ Panthers</td><td>Sun 8:20 PM</td><td>+3.8</td><td>51.0</td><td>+3.5 <span class='dim'>-108</span></td><td>+3.5 <span class='dim'>-104</span></td><td>+3.5 <span class='dim'>+102</span></td></tr><tr><td class="l">Falcons @ Saints</td><td>Mon 8:15 PM</td><td>-2.2</td><td>48.1</td><td>-2.5 <span class='dim'>-112</span></td><td>-2.5 <span class='dim'>-118</span></td><td>-2.5 <span class='dim'>+100</span></td></tr><tr><td class="l">Buccaneers @ Cowboys</td><td>Thu 8:15 PM</td><td>-9.8</td><td>47.2</td><td>-9.5 <span class='dim'>-110</span></td><td>-9.5 <span class='dim'>-110</span></td><td>-9.5 <span class='dim'>-106</span></td></tr></table></div></div></details>
+<details class='more'><summary>Every positive-value price<span>25 right now</span></summary><div class='inner'><div class='tbl'><table><tr><th class="l">Game</th><th>Bet</th><th>Book</th><th>Price</th><th>Fair win</th><th>Edge</th><th>EV</th></tr><tr><td class="l">Chargers @ Seahawks</td><td>Seahawks -13.5</td><td>Novig</td><td>+199</td><td>37%</td><td><span class='pos'>+3.8%</span></td><td><span class='pos'>+11.2%</span></td></tr><tr><td class="l">Patriots @ Bills</td><td>Bills -13.5</td><td>Novig</td><td>+223</td><td>34%</td><td><span class='pos'>+3.4%</span></td><td><span class='pos'>+11.0%</span></td></tr><tr><td class="l">Dolphins @ Vikings</td><td>Vikings -17.5</td><td>Novig</td><td>+239</td><td>33%</td><td><span class='pos'>+3.2%</span></td><td><span class='pos'>+10.8%</span></td></tr><tr><td class="l">Chargers @ Seahawks</td><td>Seahawks -14.5</td><td>FanDuel</td><td>+230</td><td>33%</td><td><span class='pos'>+2.7%</span></td><td><span class='pos'>+8.8%</span></td></tr><tr><td class="l">Chargers @ Seahawks</td><td>Seahawks -13.5</td><td>FanDuel</td><td>+190</td><td>37%</td><td><span class='pos'>+2.7%</span></td><td><span class='pos'>+7.9%</span></td></tr><tr><td class="l">Chargers @ Seahawks</td><td>Seahawks -10.5</td><td>Novig</td><td>+150</td><td>43%</td><td><span class='pos'>+3.1%</span></td><td><span class='pos'>+7.7%</span></td></tr><tr><td class="l">Chargers @ Seahawks</td><td>Seahawks -12.5</td><td>Novig</td><td>+174</td><td>39%</td><td><span class='pos'>+2.5%</span></td><td><span class='pos'>+7.0%</span></td></tr><tr><td class="l">Chargers @ Seahawks</td><td>Seahawks -11.5</td><td>Novig</td><td>+160</td><td>41%</td><td><span class='pos'>+2.6%</span></td><td><span class='pos'>+6.8%</span></td></tr><tr><td class="l">Bengals @ Dolphins</td><td>Dolphins +8.5</td><td>FanDuel</td><td>-105</td><td>54%</td><td><span class='pos'>+3.2%</span></td><td><span class='pos'>+6.2%</span></td></tr><tr><td class="l">49ers @ Seahawks</td><td>Seahawks -3.0</td><td>DraftKings</td><td>-112</td><td>52%</td><td><span class='pos'>+3.4%</span></td><td><span class='pos'>+5.9%</span></td></tr><tr><td class="l">Chargers @ Seahawks</td><td>Under 36.5</td><td>Novig</td><td>+233</td><td>32%</td><td><span class='pos'>+1.7%</span></td><td><span class='pos'>+5.5%</span></td></tr><tr><td class="l">Jets @ Bears</td><td>Bears -7.5</td><td>Novig</td><td>+194</td><td>36%</td><td><span class='pos'>+1.8%</span></td><td><span class='pos'>+5.4%</span></td></tr><tr><td class="l">Jets @ Bears</td><td>Bears -2.5</td><td>Novig</td><td>-138</td><td>61%</td><td><span class='pos'>+3.1%</span></td><td><span class='pos'>+5.4%</span></td></tr><tr><td class="l">Cardinals @ Giants</td><td>Cardinals -7.5</td><td>FanDuel</td><td>+250</td><td>30%</td><td><span class='pos'>+1.5%</span></td><td><span class='pos'>+5.2%</span></td></tr><tr><td class="l">Chargers @ Seahawks</td><td>Seahawks -15.5</td><td>FanDuel</td><td>+240</td><td>31%</td><td><span class='pos'>+1.5%</span></td><td><span class='pos'>+5.2%</span></td></tr><tr><td class="l">Bengals @ Dolphins</td><td>Dolphins +8.5</td><td>Novig</td><td>-108</td><td>54%</td><td><span class='pos'>+2.5%</span></td><td><span class='pos'>+4.8%</span></td></tr><tr><td class="l">Dolphins @ Vikings</td><td>Vikings -13.5</td><td>Novig</td><td>+138</td><td>44%</td><td><span class='pos'>+2.0%</span></td><td><span class='pos'>+4.7%</span></td></tr><tr><td class="l">Titans @ Ravens</td><td>Under 35.5</td><td>FanDuel</td><td>+250</td><td>30%</td><td><span class='pos'>+1.3%</span></td><td><span class='pos'>+4.7%</span></td></tr><tr><td class="l">Titans @ Ravens</td><td>Titans +9.5</td><td>Novig</td><td>+133</td><td>45%</td><td><span class='pos'>+2.0%</span></td><td><span class='pos'>+4.7%</span></td></tr><tr><td class="l">Packers @ Buccaneers</td><td>Under 32.5</td><td>Novig</td><td>+228</td><td>32%</td><td><span class='pos'>+1.4%</span></td><td><span class='pos'>+4.7%</span></td></tr><tr><td class="l">Falcons @ Saints</td><td>Falcons -2.5</td><td>Novig</td><td>+160</td><td>40%</td><td><span class='pos'>+1.7%</span></td><td><span class='pos'>+4.5%</span></td></tr><tr><td class="l">Chargers @ Seahawks</td><td>Seahawks -9.5</td><td>Novig</td><td>+127</td><td>46%</td><td><span class='pos'>+2.0%</span></td><td><span class='pos'>+4.5%</span></td></tr><tr><td class="l">Jets @ Bears</td><td>Over 48.5</td><td>Novig</td><td>+203</td><td>34%</td><td><span class='pos'>+1.5%</span></td><td><span class='pos'>+4.5%</span></td></tr><tr><td class="l">Jets @ Bears</td><td>Bears -9.5</td><td>Novig</td><td>+233</td><td>31%</td><td><span class='pos'>+1.3%</span></td><td><span class='pos'>+4.4%</span></td></tr><tr><td class="l">Chargers @ Seahawks</td><td>Seahawks -11.5</td><td>FanDuel</td><td>+154</td><td>41%</td><td><span class='pos'>+1.7%</span></td><td><span class='pos'>+4.3%</span></td></tr></table></div></div></details>
+<details class='more'><summary>Pick history<span>20 recorded</span></summary><div class='inner'><div class='tbl'><table><tr><th class="l">Week</th><th>Game</th><th>Bet</th><th>Book</th><th>Price</th><th>CLV</th><th>Result</th><th>Units</th><th>Counts</th></tr><tr><td class="l">Wk 1</td><td>Broncos @ Chiefs</td><td>Under 42.5</td><td>Novig</td><td>+113</td><td><span class='pos'>+2.37%</span></td><td>win</td><td><span class='pos'>+1.13</span></td><td>✓</td></tr><tr><td class="l">Wk 1</td><td>Falcons @ Steelers</td><td>Steelers -2.5</td><td>Novig</td><td>-144</td><td><span class='pos'>+7.65%</span></td><td>win</td><td><span class='pos'>+0.69</span></td><td>✓</td></tr><tr><td class="l">Wk 1</td><td>49ers @ Rams</td><td>Under 33.5</td><td>Novig</td><td>+641</td><td><span class='pos'>+1.12%</span></td><td>loss</td><td><span class='neg'>-1.00</span></td><td><span class='dim'>excluded</span></td></tr><tr><td class="l">Wk 1</td><td>Broncos @ Chiefs</td><td>Under 43.5</td><td>Novig</td><td>+100</td><td><span class='pos'>+2.29%</span></td><td>win</td><td><span class='pos'>+1.00</span></td><td><span class='dim'>excluded</span></td></tr><tr><td class="l">Wk 1</td><td>Broncos @ Chiefs</td><td>Under 42.5</td><td>Novig</td><td>+113</td><td><span class='pos'>+2.37%</span></td><td>win</td><td><span class='pos'>+1.13</span></td><td><span class='dim'>excluded</span></td></tr><tr><td class="l">Wk 1</td><td>Ravens @ Colts</td><td>Ravens -3.5</td><td>Novig</td><td>+115</td><td><span class='neg'>-1.67%</span></td><td>win</td><td><span class='pos'>+1.15</span></td><td>✓</td></tr><tr><td class="l">Wk 2</td><td>Packers @ Jets</td><td>Packers -2.5</td><td>Novig</td><td>-133</td><td><span class='neg'>-2.42%</span></td><td>win</td><td><span class='pos'>+0.75</span></td><td>✓</td></tr><tr><td class="l">Wk 2</td><td>Seahawks @ Cardinals</td><td>Seahawks -4.5</td><td>Novig</td><td>+113</td><td><span class='pos'>+0.34%</span></td><td>win</td><td><span class='pos'>+1.13</span></td><td>✓</td></tr><tr><td class="l">Wk 2</td><td>Browns @ Buccaneers</td><td>Browns -16.5</td><td>FanDuel</td><td>+3000</td><td><span class='pos'>+0.01%</span></td><td>loss</td><td><span class='neg'>-1.00</span></td><td><span class='dim'>excluded</span></td></tr><tr><td class="l">Wk 2</td><td>Steelers @ Patriots</td><td>Under 25.5</td><td>Novig</td><td>+900</td><td><span class='pos'>+2.16%</span></td><td>win</td><td><span class='pos'>+9.00</span></td><td><span class='dim'>excluded</span></td></tr><tr><td class="l">Wk 2</td><td>Eagles @ Titans</td><td>Titans +4.5</td><td>Novig</td><td>+144</td><td><span class='pos'>+2.88%</span></td><td>win</td><td><span class='pos'>+1.44</span></td><td>✓</td></tr><tr><td class="l">Wk 2</td><td>Packers @ Jets</td><td>Jets +3.5</td><td>DraftKings</td><td>-105</td><td><span class='pos'>+2.35%</span></td><td>win</td><td><span class='pos'>+0.95</span></td><td><span class='dim'>excluded</span></td></tr><tr><td class="l">Wk 3</td><td>Cardinals @ 49ers</td><td>49ers -2.5 &amp; Titans +8.5 (6-pt teaser)</td><td>DraftKings</td><td>-120</td><td><span class='neg'>-0.02%</span></td><td>win</td><td><span class='pos'>+0.83</span></td><td><span class='dim'>excluded</span></td></tr><tr><td class="l">Wk 3</td><td>Titans @ Giants</td><td>Titans +8.5 &amp; Colts +8.5 (6-pt teaser)</td><td>DraftKings</td><td>-120</td><td><span class='pos'>+1.20%</span></td><td>win</td><td><span class='pos'>+0.83</span></td><td><span class='dim'>excluded</span></td></tr><tr><td class="l">Wk 3</td><td>Rams @ Broncos</td><td>Broncos +8.5 &amp; 49ers -2.5 (6-pt teaser)</td><td>DraftKings</td><td>-120</td><td><span class='pos'>+1.45%</span></td><td>win</td><td><span class='pos'>+0.83</span></td><td>✓</td></tr><tr><td class="l">Wk 3</td><td>Titans @ Giants</td><td>Under 38.5</td><td>FanDuel</td><td>-111</td><td><span class='neg'>-0.11%</span></td><td>win</td><td><span class='pos'>+0.90</span></td><td>✓</td></tr><tr><td class="l">Wk 3</td><td>Cardinals @ 49ers</td><td>Cardinals -15.5</td><td>FanDuel</td><td>+3000</td><td><span class='pos'>+0.01%</span></td><td>loss</td><td><span class='neg'>-1.00</span></td><td><span class='dim'>excluded</span></td></tr><tr><td class="l">Wk 3</td><td>Seahawks @ Commanders</td><td>Under 25.5</td><td>Novig</td><td>+770</td><td><span class='pos'>+2.01%</span></td><td>loss</td><td><span class='neg'>-1.00</span></td><td><span class='dim'>excluded</span></td></tr><tr><td class="l">Wk 4</td><td>Rams @ Eagles</td><td>Eagles +2.5</td><td>Novig</td><td>+135</td><td><span class=''></span></td><td></td><td></td><td>✓</td></tr><tr><td class="l">Wk 4</td><td>Titans @ Ravens</td><td>Titans +10.5</td><td>Novig</td><td>+113</td><td><span class=''></span></td><td></td><td></td><td>✓</td></tr></table></div><p class='note'>"Excluded" picks were made before the Oct 2 rules: repeat picks of a game already picked that week, longshot alternate lines, or negative expected value. As recorded, all picks went 14-4 for +17.78 units.</p></div></details>
+<details class='more'><summary>Background log<span>88 bets tracked</span></summary><div class='inner'><div class='tbl'><table><tr><th class="l">Card rank</th><th>Bets</th><th>Record</th><th>Hit %</th><th>ROI %</th><th>Avg CLV %</th></tr><tr><td class="l">3-5</td><td>25</td><td>11-12-0</td><td>47.8</td><td>-1.3</td><td>1.53</td></tr><tr><td class="l">6+</td><td>43</td><td>14-21-0</td><td>40.0</td><td>-19.7</td><td>0.68</td></tr><tr><td class="l">picks (1-2)</td><td>20</td><td>14-4-0</td><td>77.8</td><td>98.8</td><td>1.33</td></tr></table></div><div class='tbl'><table><tr><th class="l">Strategy</th><th>Bets</th><th>Record</th><th>Hit %</th><th>ROI %</th><th>Avg CLV %</th></tr><tr><td class="l">Line-move lag</td><td>14</td><td>4-9-0</td><td>30.8</td><td>23.1</td><td>2.4</td></tr><tr><td class="l">Price edge</td><td>50</td><td>23-18-0</td><td>56.1</td><td>15.2</td><td>0.73</td></tr><tr><td class="l">Wind unders</td><td>8</td><td>7-1-0</td><td>87.5</td><td>77.3</td><td>1.03</td></tr><tr><td class="l">Wong teasers</td><td>16</td><td>5-9-0</td><td>35.7</td><td>-34.5</td><td>0.96</td></tr></table></div><p class='note'>Every bet the card considered, scored the same way, so we can see whether a strategy the picks ignore is quietly better.</p></div></details>
+<details class='more'><summary>Why we don't just bet favorites<span>27 seasons of data</span></summary><div class='inner'><div class='tbl'><table><tr><th class="l">Blind strategy, closing lines</th><th>Bets</th><th>Win %</th><th>Return</th></tr><tr><td class="l">Moneyline favorites −500 or shorter</td><td>532</td><td>87.4%</td><td><span class='neg'>−0.4%</span></td></tr><tr><td class="l">Moneyline favorites −300 to −500</td><td>1,005</td><td>77.2%</td><td><span class='neg'>−1.7%</span></td></tr><tr><td class="l">All moneyline favorites, 2006–2025</td><td>5,281</td><td>66.4%</td><td><span class='neg'>−3.5%</span></td></tr><tr><td class="l">Spread favorites at −110, 1999–2025</td><td>7,081</td><td>48.7%</td><td><span class='neg'>−7.0%</span></td></tr><tr><td class="l">Outdoor unders, wind 12+ mph, 2020–2025</td><td>242</td><td>58.3%</td><td><span class='pos'>+11.2%</span></td></tr><tr><td class="l">Wong teaser legs through 3 and 7, 2010–2025</td><td>952</td><td>75.2%</td><td><span class='pos'>+ at −120 or better</span></td></tr></table></div><p class='note'>Picking winners isn't where the money is: the market prices favorites so that even an 87% winner loses money over time.</p></div></details>
+</section>
+<footer>Paper mode. Fair value is the de-vigged Pinnacle, Novig, Kalshi and ProphetX consensus, translated across lines with a key-number model built on 7,000+ games. Picks are the two best bets by expected value with positive edge, one per game per week. Built Oct 2, 10:02 AM ET.</footer>
+</div></main>
+<script type='application/json' id='dash-data'>{"cum": [{"label": "Sun Sep 13", "week": 1, "day": 1.84, "cum": 1.84, "bets": ["\u2713 Steelers -2.5 -144", "\u2713 Ravens -3.5 +115"]}, {"label": "Mon Sep 14", "week": 1, "day": 1.13, "cum": 2.97, "bets": ["\u2713 Under 42.5 +113"]}, {"label": "Sun Sep 20", "week": 2, "day": 3.32, "cum": 6.3, "bets": ["\u2713 Packers -2.5 -133", "\u2713 Titans +4.5 +144", "\u2713 Seahawks -4.5 +113"]}, {"label": "Sun Sep 27", "week": 3, "day": 1.73, "cum": 8.03, "bets": ["\u2713 Under 38.5 -111", "\u2713 Broncos +8.5 &amp; 49ers -2.5 (6-pt teaser) -120"]}], "weeks": [{"week": 1, "units": 2.97, "record": "3-0", "bets": ["\u2713 Steelers -2.5", "\u2713 Ravens -3.5", "\u2713 Under 42.5"]}, {"week": 2, "units": 3.32, "record": "3-0", "bets": ["\u2713 Packers -2.5", "\u2713 Titans +4.5", "\u2713 Seahawks -4.5"]}, {"week": 3, "units": 1.73, "record": "2-0", "bets": ["\u2713 Under 38.5", "\u2713 Broncos +8.5 &amp; 49ers -2.5 (6-pt teaser)"]}], "clv": [{"label": "Our picks", "strong": true, "n": 8, "mean": 0.013095039868436992, "lo": -0.008750179288736021, "hi": 0.03494025902561}, {"label": "Every bet logged", "strong": true, "n": 71, "mean": 0.010907244036726589, "lo": 0.005329954051520488, "hi": 0.01648453402193269}, {"label": "Line-move lag", "divider": true, "n": 8, "mean": 0.03240998620186761, "lo": 0.008809332274943155, "hi": 0.05601064012879206}, {"label": "Wind unders", "divider": false, "n": 8, "mean": 0.010268992017839526, "lo": 0.0024720040747353966, "hi": 0.018065979960943654}, {"label": "Price edge", "divider": false, "n": 41, "mean": 0.007276730672771247, "lo": -1.3973826844835245e-05, "hi": 0.01456743517238733}, {"label": "Wong teasers", "divider": false, "n": 14, "mean": 0.009616895947593542, "lo": 0.00011252605652713535, "hi": 0.01912126583865995}]}</script><script>
+(function(){
+const D = JSON.parse(document.getElementById('dash-data').textContent);
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const NS = 'http://www.w3.org/2000/svg';
+const el = (t, a, p) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; };
+const fmtU = v => (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v).toFixed(2) + 'u';
+const fmtP = v => (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v * 100).toFixed(2) + '%';
+
+function tipFor(host){
+  let t = host.querySelector('.tip'); if (!t){ t = document.createElement('div'); t.className = 'tip'; host.appendChild(t); }
+  return {
+    show(html, x, y){ t.innerHTML = html; t.style.opacity = 1;
+      const w = t.offsetWidth, hw = host.clientWidth;
+      t.style.left = Math.max(0, Math.min(hw - w, x - w / 2)) + 'px'; t.style.top = Math.max(0, y - t.offsetHeight - 10) + 'px'; },
+    hide(){ t.style.opacity = 0; }
+  };
+}
+function niceTicks(lo, hi, n){
+  const span = hi - lo || 1, raw = span / n, mag = Math.pow(10, Math.floor(Math.log10(raw)));
+  const step = [1, 2, 2.5, 5, 10].map(m => m * mag).find(s => s >= raw);
+  const out = [], top = Math.ceil(hi / step - 1e-9) * step; for (let v = Math.floor(lo / step + 1e-9) * step; v <= top + 1e-9; v += step) out.push(+v.toFixed(6)); return out;
+}
+
+/* 1. cumulative units, one series */
+function cumulative(host){
+  const pts = D.cum; host.innerHTML = '';
+  if (!pts.length){ host.innerHTML = '<p class="note">No graded picks yet.</p>'; return; }
+  const W = host.clientWidth, H = 210, m = {l: 34, r: 54, t: 14, b: 26};
+  const svg = el('svg', {viewBox: `0 0 ${W} ${H}`, height: H, role: 'img', 'aria-label': 'Cumulative units won by the picks'}, host);
+  const ys = pts.map(p => p.cum).concat([0]);
+  const ticks = niceTicks(Math.min(...ys), Math.max(...ys), 4);
+  const y0 = ticks[0], y1 = ticks[ticks.length - 1];
+  const n = pts.length, X = i => m.l + (n === 1 ? (W - m.l - m.r) / 2 : i * (W - m.l - m.r) / (n - 1));
+  const Y = v => m.t + (y1 - v) * (H - m.t - m.b) / (y1 - y0 || 1);
+  ticks.forEach(v => { el('line', {x1: m.l, x2: W - m.r, y1: Y(v), y2: Y(v), stroke: v === 0 ? css('--base') : css('--grid'), 'stroke-width': 1}, svg);
+    const t = el('text', {x: m.l - 6, y: Y(v) + 4, 'text-anchor': 'end'}, svg); t.textContent = (v > 0 ? '+' : '') + v; });
+  let lastWk = null;
+  pts.forEach((p, i) => { if (p.week !== lastWk){ const t = el('text', {x: X(i), y: H - 6, 'text-anchor': i === 0 ? 'start' : 'middle'}, svg); t.textContent = 'Wk ' + p.week; lastWk = p.week; } });
+  const line = pts.map((p, i) => `${i ? 'L' : 'M'}${X(i)},${Y(p.cum)}`).join('');
+  el('path', {d: `${line}L${X(n - 1)},${Y(0)}L${X(0)},${Y(0)}Z`, fill: css('--blue-wash')}, svg);
+  el('path', {d: line, fill: 'none', stroke: css('--blue'), 'stroke-width': 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round'}, svg);
+  const lp = pts[n - 1];
+  el('circle', {cx: X(n - 1), cy: Y(lp.cum), r: 4.5, fill: css('--blue'), stroke: css('--surface'), 'stroke-width': 2}, svg);
+  const lt = el('text', {x: X(n - 1) + 9, y: Y(lp.cum) + 4, class: 'v'}, svg); lt.textContent = fmtU(lp.cum);
+  const tip = tipFor(host), dot = el('circle', {r: 4.5, fill: css('--blue'), stroke: css('--surface'), 'stroke-width': 2, opacity: 0}, svg);
+  pts.forEach((p, i) => {
+    const x0 = i === 0 ? m.l : (X(i - 1) + X(i)) / 2, x1 = i === n - 1 ? W - m.r : (X(i) + X(i + 1)) / 2;
+    const r = el('rect', {x: x0, y: 0, width: Math.max(1, x1 - x0), height: H, fill: 'transparent'}, svg);
+    const on = () => { dot.setAttribute('cx', X(i)); dot.setAttribute('cy', Y(p.cum)); dot.setAttribute('opacity', 1);
+      tip.show(`<b>${p.label}</b><br>${p.bets.join('<br>')}<br>Day ${fmtU(p.day)} · total <b>${fmtU(p.cum)}</b>`, X(i), Y(p.cum)); };
+    r.addEventListener('pointerenter', on); r.addEventListener('pointerdown', on);
+    r.addEventListener('pointerleave', () => { dot.setAttribute('opacity', 0); tip.hide(); });
+  });
+}
+
+/* 2. beating the close: dot + 95% interval per row, zero line */
+function clv(host){
+  const rows = D.clv; host.innerHTML = '';
+  if (!rows.length){ host.innerHTML = '<p class="note">No closing-line data yet.</p>'; return; }
+  const W = host.clientWidth, rh = 38, m = {l: Math.min(126, W * 0.36), r: 58, t: 8, b: 24}, H = m.t + m.b + rows.length * rh;
+  const svg = el('svg', {viewBox: `0 0 ${W} ${H}`, height: H, role: 'img', 'aria-label': 'Closing-line value by strategy with 95% intervals'}, host);
+  const lo = Math.min(-0.01, ...rows.map(r => r.lo)), hi = Math.max(0.02, ...rows.map(r => r.hi));
+  const ticks = niceTicks(lo, hi, W < 480 ? 3 : 4), x0 = ticks[0], x1 = ticks[ticks.length - 1];
+  const X = v => m.l + (v - x0) * (W - m.l - m.r) / (x1 - x0);
+  ticks.forEach(v => { el('line', {x1: X(v), x2: X(v), y1: m.t, y2: H - m.b, stroke: v === 0 ? css('--base') : css('--grid'), 'stroke-width': 1}, svg);
+    const t = el('text', {x: X(v), y: H - 6, 'text-anchor': 'middle'}, svg); const pc = +(v * 100).toFixed(1); t.textContent = (pc > 0 ? '+' : '') + (Number.isInteger(pc) ? pc : pc.toFixed(1)) + '%'; });
+  const tip = tipFor(host);
+  rows.forEach((r, i) => {
+    const cy = m.t + i * rh + rh / 2;
+    if (r.divider) el('line', {x1: 0, x2: W, y1: m.t + i * rh, y2: m.t + i * rh, stroke: css('--grid'), 'stroke-width': 1}, svg);
+    const lab = el('text', {x: 0, y: cy - 1, class: r.strong ? 'v' : 'l'}, svg); lab.textContent = r.label;
+    const cnt = el('text', {x: 0, y: cy + 12}, svg); cnt.textContent = r.n + (r.n === 1 ? ' bet' : ' bets');
+    el('line', {x1: X(r.lo), x2: X(r.hi), y1: cy, y2: cy, stroke: css('--blue'), 'stroke-width': 2, 'stroke-linecap': 'round', opacity: .55}, svg);
+    el('circle', {cx: X(r.mean), cy, r: 5, fill: css('--blue'), stroke: css('--surface'), 'stroke-width': 2}, svg);
+    const v = el('text', {x: W, y: cy + 4, 'text-anchor': 'end', class: 'v'}, svg); v.textContent = fmtP(r.mean);
+    const hit = el('rect', {x: 0, y: cy - rh / 2, width: W, height: rh, fill: 'transparent'}, svg);
+    const on = () => tip.show(`<b>${r.label}</b><br>Mean ${fmtP(r.mean)} on ${r.n} bets<br>95% range ${fmtP(r.lo)} to ${fmtP(r.hi)}<br>${r.lo > 0 ? 'Clearly beating the close' : 'Not yet proven'}`, X(r.mean), cy - 6);
+    hit.addEventListener('pointerenter', on); hit.addEventListener('pointerdown', on); hit.addEventListener('pointerleave', () => tip.hide());
+  });
+}
+
+/* 3. weekly units: diverging columns, blue up / red down */
+function weekly(host){
+  const wk = D.weeks; host.innerHTML = '';
+  if (!wk.length){ host.innerHTML = '<p class="note">No graded weeks yet.</p>'; return; }
+  const W = host.clientWidth, H = 190, m = {l: 34, r: 8, t: 22, b: 40};
+  const svg = el('svg', {viewBox: `0 0 ${W} ${H}`, height: H, role: 'img', 'aria-label': 'Units won by the picks each week'}, host);
+  const vals = wk.map(w => w.units).concat([0]);
+  const ticks = niceTicks(Math.min(...vals), Math.max(...vals), 3), y0 = ticks[0], y1 = ticks[ticks.length - 1];
+  const Y = v => m.t + (y1 - v) * (H - m.t - m.b) / (y1 - y0 || 1);
+  ticks.forEach(v => { el('line', {x1: m.l, x2: W - m.r, y1: Y(v), y2: Y(v), stroke: v === 0 ? css('--base') : css('--grid'), 'stroke-width': 1}, svg);
+    const t = el('text', {x: m.l - 6, y: Y(v) + 4, 'text-anchor': 'end'}, svg); t.textContent = (v > 0 ? '+' : '') + v; });
+  const slot = (W - m.l - m.r) / wk.length, bw = Math.min(24, slot * 0.5), tip = tipFor(host);
+  wk.forEach((w, i) => {
+    const cx = m.l + slot * (i + 0.5), up = w.units >= 0, top = Y(Math.max(0, w.units)), bot = Y(Math.min(0, w.units)), h = Math.max(1, bot - top), r = Math.min(4, h);
+    const x = cx - bw / 2;
+    const d = up ? `M${x},${bot}V${top + r}Q${x},${top} ${x + r},${top}H${x + bw - r}Q${x + bw},${top} ${x + bw},${top + r}V${bot}Z`
+                 : `M${x},${top}V${bot - r}Q${x},${bot} ${x + r},${bot}H${x + bw - r}Q${x + bw},${bot} ${x + bw},${bot - r}V${top}Z`;
+    el('path', {d, fill: up ? css('--blue') : css('--red')}, svg);
+    const v = el('text', {x: cx, y: up ? top - 6 : bot + 14, 'text-anchor': 'middle', class: 'v'}, svg); v.textContent = fmtU(w.units);
+    const a = el('text', {x: cx, y: H - 22, 'text-anchor': 'middle', class: 'l'}, svg); a.textContent = 'Wk ' + w.week;
+    const b = el('text', {x: cx, y: H - 7, 'text-anchor': 'middle'}, svg); b.textContent = w.record;
+    const hit = el('rect', {x: cx - slot / 2, y: 0, width: slot, height: H, fill: 'transparent'}, svg);
+    const on = () => tip.show(`<b>Week ${w.week}</b><br>${w.record} · ${fmtU(w.units)}<br>${w.bets.join('<br>')}`, cx, Math.min(top, bot) );
+    hit.addEventListener('pointerenter', on); hit.addEventListener('pointerdown', on); hit.addEventListener('pointerleave', () => tip.hide());
+  });
+}
+
+const draw = () => { const c = document.getElementById('c-cum'), v = document.getElementById('c-clv'), w = document.getElementById('c-wk');
+  if (c) cumulative(c); if (v) clv(v); if (w) weekly(w); };
+draw(); let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(draw, 120); });
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', draw);
+document.addEventListener('pointerdown', e => { if (!e.target.closest('.plot')) document.querySelectorAll('.tip').forEach(t => t.style.opacity = 0); });
+})();
+</script>
